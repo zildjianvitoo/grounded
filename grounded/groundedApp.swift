@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct groundedApp: App {
@@ -13,5 +14,10 @@ struct groundedApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [
+            FocusContract.self,
+            FocusSession.self,
+            FocusBreak.self,
+        ])
     }
 }

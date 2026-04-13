@@ -97,53 +97,53 @@
 **Outcome:** UI yang sudah jadi mulai memakai data dan lifecycle nyata, sehingga loop utama produk berfungsi secara end-to-end di device.
 
 ### Task 1: Data Model and Persistence
-- [ ] Implementasikan model `FocusContract`, `FocusSession`, `FocusBreak`, `ToneType`, dan `SessionStatus`.
-- [ ] Simpan semuanya dengan SwiftData.
-- [ ] Definisikan relasi yang jelas antara contract, session, dan break log.
+- [x] Implementasikan model `FocusContract`, `FocusSession`, `FocusBreak`, `ToneType`, dan `SessionStatus`.
+- [x] Simpan semuanya dengan SwiftData.
+- [x] Definisikan relasi yang jelas antara contract, session, dan break log.
 
 ### Task 2: Contract Creation Logic
-- [ ] Hubungkan form contract ke model nyata.
-- [ ] Tambahkan validasi minimum agar user tidak bisa memulai sesi kosong.
-- [ ] Simpan contract baru sebelum sesi dimulai.
+- [x] Hubungkan form contract ke model nyata.
+- [x] Tambahkan validasi minimum agar user tidak bisa memulai sesi kosong.
+- [x] Simpan contract baru sebelum sesi dimulai.
 
 ### Task 3: Session Start and Timer Logic
-- [ ] Implementasikan aksi `Start Focus`.
-- [ ] Buat session baru dengan `startedAt`, `status`, dan target duration.
-- [ ] Jalankan timer/session state yang tetap akurat saat app berpindah lifecycle.
+- [x] Implementasikan aksi `Start Focus`.
+- [x] Buat session baru dengan `startedAt`, `status`, dan target duration.
+- [x] Jalankan timer/session state yang tetap akurat saat app berpindah lifecycle.
 
 ### Task 4: Break Detection
-- [ ] Gunakan `scenePhase` / app lifecycle untuk mendeteksi saat user keluar dari fokus aktif.
-- [ ] Catat `breakStartedAt` ketika sesi terinterupsi.
-- [ ] Saat user kembali, tutup break aktif dan hitung durasinya.
+- [x] Gunakan `scenePhase` / app lifecycle untuk mendeteksi saat user keluar dari fokus aktif.
+- [x] Catat `breakStartedAt` ketika sesi terinterupsi.
+- [x] Saat user kembali, tutup break aktif dan hitung durasinya.
 
 ### Task 5: Local Notification
-- [ ] Minta izin notifikasi lokal.
-- [ ] Tentukan trigger notification ketika break dimulai atau setelah delay pendek yang terdefinisi.
-- [ ] Bangun generator copy notification berdasarkan `why it matters`, `consequence`, dan `tone`.
+- [x] Minta izin notifikasi lokal.
+- [x] Tentukan trigger notification ketika break dimulai atau setelah delay pendek yang terdefinisi.
+- [x] Bangun generator copy notification berdasarkan `why it matters`, `consequence`, dan `tone`.
 
 ### Task 6: Consequence Replay Logic
-- [ ] Tampilkan Consequence Replay screen otomatis saat user kembali dari break.
-- [ ] Isi data real: break duration, reminder text, dan consequence line.
-- [ ] Implementasikan aksi `Resume Focus` dan `End Session`.
+- [x] Tampilkan Consequence Replay screen otomatis saat user kembali dari break.
+- [x] Isi data real: break duration, reminder text, dan consequence line.
+- [x] Implementasikan aksi `Resume Focus` dan `End Session`.
 
 ### Task 7: Session Summary Calculation
-- [ ] Hitung `totalFocusSeconds`, `totalBreakSeconds`, dan `breakCount`.
-- [ ] Pastikan kalkulasi aman untuk sesi yang berakhir normal maupun dihentikan manual.
-- [ ] Kirim data hasil kalkulasi ke Reflection Report screen.
+- [x] Hitung `totalFocusSeconds`, `totalBreakSeconds`, dan `breakCount`.
+- [x] Pastikan kalkulasi aman untuk sesi yang berakhir normal maupun dihentikan manual.
+- [x] Kirim data hasil kalkulasi ke Reflection Report screen.
 
 ### Task 8: Live Activity Integration
-- [ ] Sambungkan Active Focus Session ke ActivityKit.
-- [ ] Update timer, task summary, dan status selama sesi berjalan.
-- [ ] Hentikan Live Activity saat sesi selesai.
+- [x] Sambungkan Active Focus Session ke ActivityKit.
+- [x] Update timer, task summary, dan status selama sesi berjalan.
+- [x] Hentikan Live Activity saat sesi selesai.
 
 ### Task 9: Haptics and Micro Feedback
-- [ ] Tambahkan haptic saat start focus, resume focus, dan end session.
-- [ ] Pastikan feedback terasa membantu, bukan mengganggu.
+- [x] Tambahkan haptic saat start focus, resume focus, dan end session.
+- [x] Pastikan feedback terasa membantu, bukan mengganggu.
 
 ### Task 10: Offline Reliability and Recovery
-- [ ] Pastikan sesi tetap recoverable setelah app ditutup dan dibuka lagi.
-- [ ] Handle state yang belum selesai: active session, active break, atau completed session.
-- [ ] Verifikasi semua flow inti tetap berjalan tanpa internet.
+- [x] Pastikan sesi tetap recoverable setelah app ditutup dan dibuka lagi.
+- [x] Handle state yang belum selesai: active session, active break, atau completed session.
+- [x] Verifikasi semua flow inti tetap berjalan tanpa internet.
 
 ## Milestone 3: Polish and QA
 

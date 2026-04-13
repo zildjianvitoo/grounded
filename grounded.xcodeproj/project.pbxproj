@@ -6,8 +6,37 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A100000E2F999001008DCF92 /* groundedLiveActivityExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A10000042F999001008DCF92 /* groundedLiveActivityExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A10000022F999001008DCF92 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 025D80992F888CC6008DCF92 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000072F999001008DCF92;
+			remoteInfo = groundedLiveActivityExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A10000032F999001008DCF92 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A100000E2F999001008DCF92 /* groundedLiveActivityExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		025D80A12F888CC6008DCF92 /* grounded.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = grounded.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000042F999001008DCF92 /* groundedLiveActivityExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = groundedLiveActivityExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +45,22 @@
 			path = grounded;
 			sourceTree = "<group>";
 		};
+		A10000052F999001008DCF92 /* groundedLiveActivityExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = groundedLiveActivityExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		025D809E2F888CC6008DCF92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000062F999001008DCF92 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				025D80A32F888CC6008DCF92 /* grounded */,
+				A10000052F999001008DCF92 /* groundedLiveActivityExtension */,
 				025D80A22F888CC6008DCF92 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				025D80A12F888CC6008DCF92 /* grounded.app */,
+				A10000042F999001008DCF92 /* groundedLiveActivityExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +98,12 @@
 				025D809D2F888CC6008DCF92 /* Sources */,
 				025D809E2F888CC6008DCF92 /* Frameworks */,
 				025D809F2F888CC6008DCF92 /* Resources */,
+				A10000032F999001008DCF92 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A100000D2F999001008DCF92 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				025D80A32F888CC6008DCF92 /* grounded */,
@@ -69,6 +114,28 @@
 			productName = grounded;
 			productReference = 025D80A12F888CC6008DCF92 /* grounded.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A10000072F999001008DCF92 /* groundedLiveActivityExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A100000C2F999001008DCF92 /* Build configuration list for PBXNativeTarget "groundedLiveActivityExtension" */;
+			buildPhases = (
+				A10000092F999001008DCF92 /* Sources */,
+				A10000062F999001008DCF92 /* Frameworks */,
+				A10000082F999001008DCF92 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A10000052F999001008DCF92 /* groundedLiveActivityExtension */,
+			);
+			name = groundedLiveActivityExtension;
+			packageProductDependencies = (
+			);
+			productName = groundedLiveActivityExtension;
+			productReference = A10000042F999001008DCF92 /* groundedLiveActivityExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -81,6 +148,9 @@
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					025D80A02F888CC6008DCF92 = {
+						CreatedOnToolsVersion = 26.4;
+					};
+					A10000072F999001008DCF92 = {
 						CreatedOnToolsVersion = 26.4;
 					};
 				};
@@ -100,12 +170,20 @@
 			projectRoot = "";
 			targets = (
 				025D80A02F888CC6008DCF92 /* grounded */,
+				A10000072F999001008DCF92 /* groundedLiveActivityExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		025D809F2F888CC6008DCF92 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000082F999001008DCF92 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +200,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A10000092F999001008DCF92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A100000D2F999001008DCF92 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10000072F999001008DCF92 /* groundedLiveActivityExtension */;
+			targetProxy = A10000022F999001008DCF92 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		025D80AA2F888CC6008DCF92 /* Debug */ = {
@@ -256,6 +349,7 @@
 				DEVELOPMENT_TEAM = YU8G545MR2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,6 +382,7 @@
 				DEVELOPMENT_TEAM = YU8G545MR2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -310,6 +405,58 @@
 			};
 			name = Release;
 		};
+		A100000A2F999001008DCF92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YU8G545MR2;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = groundedLiveActivityExtension-Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pakenanya.grounded.liveactivity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A100000B2F999001008DCF92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YU8G545MR2;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = groundedLiveActivityExtension-Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = pakenanya.grounded.liveactivity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +474,15 @@
 			buildConfigurations = (
 				025D80AD2F888CC6008DCF92 /* Debug */,
 				025D80AE2F888CC6008DCF92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A100000C2F999001008DCF92 /* Build configuration list for PBXNativeTarget "groundedLiveActivityExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A100000A2F999001008DCF92 /* Debug */,
+				A100000B2F999001008DCF92 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
