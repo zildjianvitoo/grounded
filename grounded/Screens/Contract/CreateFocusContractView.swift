@@ -1,7 +1,13 @@
 import SwiftUI
 
 struct CreateFocusContractView: View {
+    private enum Field: Hashable {
+        case task
+        case duration
+    }
+
     @State private var draft: Draft
+    @FocusState private var focusedField: Field?
     let onStartFocus: (Draft) -> Void
     let onLoadSample: () -> Void
     let onDraftChanged: (Draft) -> Void
@@ -34,20 +40,35 @@ struct CreateFocusContractView: View {
                         TextField("Ship the mentor review prep", text: $draft.taskTitle, axis: .vertical)
                             .font(PactTypography.body)
                             .foregroundStyle(Color.pactTextPrimary)
+                            .textInputAutocapitalization(.sentences)
+                            .submitLabel(.next)
+                            .focused($focusedField, equals: .task)
+                            .onSubmit {
+                                focusedField = .duration
+                            }
                     }
 
                     PactFormField(title: "Duration") {
-                        HStack(spacing: PactSpacing.small) {
-                            TextField("45", text: $draft.durationMinutes)
-                                .keyboardType(.numberPad)
-                                .font(PactTypography.body)
-                                .foregroundStyle(Color.pactTextPrimary)
+                        VStack(alignment: .leading, spacing: PactSpacing.small) {
+                            HStack(spacing: PactSpacing.small) {
+                                TextField("45", text: $draft.durationMinutes)
+                                    .keyboardType(.numberPad)
+                                    .font(PactTypography.body)
+                                    .foregroundStyle(Color.pactTextPrimary)
+                                    .focused($focusedField, equals: .duration)
 
-                            Text("minutes")
-                                .font(PactTypography.body)
-                                .foregroundStyle(Color.pactTextSecondary)
+                                Text("minutes")
+                                    .font(PactTypography.body)
+                                    .foregroundStyle(Color.pactTextSecondary)
 
-                            Spacer(minLength: 0)
+                                Spacer(minLength: 0)
+                            }
+
+                            if draft.showsInvalidDurationHint {
+                                Text("Enter a duration greater than 0 minutes.")
+                                    .font(PactTypography.label)
+                                    .foregroundStyle(Color.pactAccent)
+                            }
                         }
                     }
 
@@ -100,16 +121,27 @@ struct CreateFocusContractView: View {
         .onChange(of: draft) { _, updatedDraft in
             onDraftChanged(updatedDraft)
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                if focusedField == .duration {
+                    Spacer()
+
+                    Button("Done") {
+                        focusedField = nil
+                    }
+                }
+            }
+        }
     }
 
     private var previewTitle: String {
         switch draft.tone {
         case .supportive:
-            "Stay with the promise you made."
+            "Stay with the promise."
         case .direct:
             "Back to the contract."
         case .savage:
-            "You wrote the promise. Stop abandoning it."
+            "You wrote this. Honor it."
         }
     }
 
@@ -153,9 +185,22 @@ extension CreateFocusContractView {
 
         var isReady: Bool {
             !taskTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-            !durationMinutes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+            parsedDurationMinutes != nil &&
             !whyItMatters.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
             !consequenceText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+
+        var parsedDurationMinutes: Int? {
+            guard let minutes = Int(durationMinutes.trimmingCharacters(in: .whitespacesAndNewlines)), minutes > 0 else {
+                return nil
+            }
+
+            return minutes
+        }
+
+        var showsInvalidDurationHint: Bool {
+            let trimmed = durationMinutes.trimmingCharacters(in: .whitespacesAndNewlines)
+            return !trimmed.isEmpty && parsedDurationMinutes == nil
         }
 
         static let empty = Draft(

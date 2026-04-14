@@ -42,11 +42,11 @@ struct PactTonePicker: View {
     private func description(for tone: MockFocusContract.Tone) -> String {
         switch tone {
         case .supportive:
-            "Warm and encouraging"
+            "Warm and steady"
         case .direct:
             "Clear and firm"
         case .savage:
-            "Sharp and confrontational"
+            "Sharp, never insulting"
         }
     }
 

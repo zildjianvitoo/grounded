@@ -47,6 +47,9 @@ struct PactAppFlow: View {
                     now: now
                 )
             }
+            .onChange(of: now) { _, newNow in
+                appState.handleClockTick(newNow, in: modelContext)
+            }
             .onChange(of: scenePhase) { _, newPhase in
                 appState.handleScenePhaseChange(newPhase, in: modelContext, now: now)
             }
@@ -82,6 +85,7 @@ struct PactAppFlow: View {
             ActiveFocusSessionView(
                 contract: displayContract,
                 session: displaySession,
+                breakAlertSupportMessage: appState.breakAlertSupportMessage,
                 onEndSession: {
                     appState.endCurrentSession(in: modelContext, now: now)
                 }

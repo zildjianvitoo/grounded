@@ -12,6 +12,8 @@ struct PactScreenContainer<Content: View>: View {
             .padding(.top, PactSpacing.screenTop)
             .padding(.bottom, PactSpacing.xLarge)
         }
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.interactively)
         .background(Color.pactBackground.ignoresSafeArea())
     }
 }

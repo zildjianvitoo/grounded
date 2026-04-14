@@ -3,6 +3,7 @@ import SwiftUI
 struct ActiveFocusSessionView: View {
     let contract: MockFocusContract
     let session: MockFocusSession
+    let breakAlertSupportMessage: String?
     let onEndSession: () -> Void
 
     var body: some View {
@@ -68,6 +69,16 @@ struct ActiveFocusSessionView: View {
                         .font(PactTypography.body)
                         .foregroundStyle(Color.pactTextSecondary)
                         .fixedSize(horizontal: false, vertical: true)
+
+                    if let breakAlertSupportMessage {
+                        Divider()
+                            .overlay(Color.pactBorder)
+
+                        Text(breakAlertSupportMessage)
+                            .font(PactTypography.body)
+                            .foregroundStyle(Color.pactAccent)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
             }
 
@@ -117,6 +128,7 @@ struct ActiveFocusSessionView_Previews: PreviewProvider {
                 ActiveFocusSessionView(
                     contract: .sample,
                     session: .sample,
+                    breakAlertSupportMessage: nil,
                     onEndSession: {}
                 )
             }
@@ -126,6 +138,7 @@ struct ActiveFocusSessionView_Previews: PreviewProvider {
                 ActiveFocusSessionView(
                     contract: .sample,
                     session: .pausedPreview,
+                    breakAlertSupportMessage: "Break alerts are off in Settings. Pact will still show the contract replay when you come back.",
                     onEndSession: {}
                 )
             }

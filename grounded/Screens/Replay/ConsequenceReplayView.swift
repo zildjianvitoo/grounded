@@ -74,6 +74,15 @@ struct ConsequenceReplayView_Previews: PreviewProvider {
                 )
             }
             .previewDisplayName("Supportive")
+
+            PactScreenContainer {
+                ConsequenceReplayView(
+                    replay: .savage,
+                    onResumeFocus: {},
+                    onEndSession: {}
+                )
+            }
+            .previewDisplayName("Savage")
         }
     }
 }

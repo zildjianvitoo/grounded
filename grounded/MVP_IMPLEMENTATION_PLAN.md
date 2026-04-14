@@ -51,46 +51,46 @@
 **Outcome:** Semua screen utama sudah terbangun, bisa dinavigasi, dan merepresentasikan user flow penuh dengan dummy data.
 
 ### Task 1: Foundation UI
-- [ ] Tentukan visual direction minimalis dan Apple-native untuk seluruh app.
-- [ ] Buat struktur navigasi utama aplikasi.
-- [ ] Definisikan reusable styles dasar: spacing, color roles, typography, button style, card style.
-- [ ] Siapkan preview/mock model agar setiap screen bisa dirender tanpa logic backend.
+- [x] Tentukan visual direction minimalis dan Apple-native untuk seluruh app.
+- [x] Buat struktur navigasi utama aplikasi.
+- [x] Definisikan reusable styles dasar: spacing, color roles, typography, button style, card style.
+- [x] Siapkan preview/mock model agar setiap screen bisa dirender tanpa logic backend.
 
 ### Task 2: Onboarding Screen
-- [ ] Buat layar onboarding dengan copy singkat tentang “focus is a promise, not just a timer”.
-- [ ] Tambahkan CTA utama untuk masuk ke flow pembuatan contract.
-- [ ] Pastikan layout nyaman di iPhone portrait dan mudah discan.
+- [x] Buat layar onboarding dengan copy singkat tentang “focus is a promise, not just a timer”.
+- [x] Tambahkan CTA utama untuk masuk ke flow pembuatan contract.
+- [x] Pastikan layout nyaman di iPhone portrait dan mudah discan.
 
 ### Task 3: Create Focus Contract Screen
-- [ ] Buat form UI untuk `task`, `duration`, `why it matters`, `consequence`, dan `tone`.
-- [ ] Tambahkan state visual untuk empty, filled, dan disabled CTA.
-- [ ] Susun hierarchy form agar field paling penting terlihat dulu.
-- [ ] Tambahkan preview tone secara visual agar user paham perbedaannya.
+- [x] Buat form UI untuk `task`, `duration`, `why it matters`, `consequence`, dan `tone`.
+- [x] Tambahkan state visual untuk empty, filled, dan disabled CTA.
+- [x] Susun hierarchy form agar field paling penting terlihat dulu.
+- [x] Tambahkan preview tone secara visual agar user paham perbedaannya.
 
 ### Task 4: Active Focus Session Screen
-- [ ] Buat layar fokus aktif dengan timer besar, task title, short reason, dan status label.
-- [ ] Tambahkan area yang menunjukkan sesi sedang berjalan tanpa distraksi visual berlebih.
-- [ ] Siapkan variasi tampilan untuk `active`, `paused/break`, dan `completed`.
+- [x] Buat layar fokus aktif dengan timer besar, task title, short reason, dan status label.
+- [x] Tambahkan area yang menunjukkan sesi sedang berjalan tanpa distraksi visual berlebih.
+- [x] Siapkan variasi tampilan untuk `active`, `paused/break`, dan `completed`.
 
 ### Task 5: Break Alert and Consequence Replay UI
-- [ ] Rancang tampilan preview untuk notifikasi lokal: title + body singkat.
-- [ ] Buat Consequence Replay screen dengan `break duration`, `why it matters`, `consequence message`, dan CTA `Resume` / `End Session`.
-- [ ] Pastikan emotional intervention terasa personal, bukan generik.
+- [x] Rancang tampilan preview untuk notifikasi lokal: title + body singkat.
+- [x] Buat Consequence Replay screen dengan `break duration`, `why it matters`, `consequence message`, dan CTA `Resume` / `End Session`.
+- [x] Pastikan emotional intervention terasa personal, bukan generik.
 
 ### Task 6: Reflection Report Screen
-- [ ] Buat layar report dengan `focused time`, `lost time`, `break count`, dan session summary.
-- [ ] Tambahkan CTA `Start New Session`.
-- [ ] Pastikan layout cukup fleksibel untuk angka kecil maupun besar.
+- [x] Buat layar report dengan `focused time`, `lost time`, `break count`, dan session summary.
+- [x] Tambahkan CTA `Start New Session`.
+- [x] Pastikan layout cukup fleksibel untuk angka kecil maupun besar.
 
 ### Task 7: Live Activity UI Preparation
-- [ ] Definisikan tampilan ringkas untuk Live Activity: task summary, timer, status.
-- [ ] Pastikan informasi penting tetap terbaca dalam ruang yang sempit.
-- [ ] Siapkan placeholder/mock rendering agar desainnya tervalidasi sebelum logic dibuat.
+- [x] Definisikan tampilan ringkas untuk Live Activity: task summary, timer, status.
+- [x] Pastikan informasi penting tetap terbaca dalam ruang yang sempit.
+- [x] Siapkan placeholder/mock rendering agar desainnya tervalidasi sebelum logic dibuat.
 
 ### Task 8: End-to-End UI Flow
-- [ ] Hubungkan semua screen dengan navigasi dummy.
-- [ ] Pastikan demo flow lengkap berjalan: onboarding -> create contract -> active session -> break replay -> reflection report.
-- [ ] Review konsistensi copy, spacing, CTA labels, dan state antar layar.
+- [x] Hubungkan semua screen dengan navigasi dummy.
+- [x] Pastikan demo flow lengkap berjalan: onboarding -> create contract -> active session -> break replay -> reflection report.
+- [x] Review konsistensi copy, spacing, CTA labels, dan state antar layar.
 
 ## Milestone 2: Functionality
 
@@ -150,22 +150,40 @@
 **Outcome:** MVP siap diuji secara serius dan lebih aman untuk didemokan.
 
 ### Task 1: Copy and Tone Review
-- [ ] Audit semua copy agar tetap personal, singkat, dan konsisten dengan tone yang dipilih.
-- [ ] Pastikan tone `Savage` tetap tegas tanpa terasa tidak pantas.
+- [x] Audit semua copy agar tetap personal, singkat, dan konsisten dengan tone yang dipilih.
+- [x] Pastikan tone `Savage` tetap tegas tanpa terasa tidak pantas.
 
 ### Task 2: Edge Cases
-- [ ] Uji sesi yang selesai tepat waktu.
-- [ ] Uji user keluar-masuk app berulang kali.
-- [ ] Uji user mengakhiri sesi ketika sedang dalam break.
-- [ ] Uji state notifikasi ditolak user.
+- [x] Uji sesi yang selesai tepat waktu.
+- [x] Uji user keluar-masuk app berulang kali.
+- [x] Uji user mengakhiri sesi ketika sedang dalam break.
+- [x] Uji state notifikasi ditolak user.
 
 ### Task 3: Visual and Interaction QA
-- [ ] Rapikan spacing, safe area, loading/state transitions, dan accessibility dasar.
-- [ ] Verifikasi seluruh screen tetap nyaman di berbagai ukuran iPhone.
+- [x] Rapikan spacing, safe area, loading/state transitions, dan accessibility dasar.
+- [x] Verifikasi seluruh screen tetap nyaman di berbagai ukuran iPhone.
 
 ### Task 4: Demo Readiness
-- [ ] Siapkan sample contract dan sample session untuk kebutuhan demo.
-- [ ] Pastikan loop utama bisa dipresentasikan kurang dari 2 menit.
+- [x] Siapkan sample contract dan sample session untuk kebutuhan demo.
+- [x] Pastikan loop utama bisa dipresentasikan kurang dari 2 menit.
+
+## Next Phase Backlog
+
+**Goal:** Menyiapkan transisi dari MVP yang stabil ke produk yang lebih siap diuji berulang dan dikembangkan tanpa regresi.
+
+### Engineering Follow-Ups
+- [ ] Tambahkan `Unit Tests` atau `UITests` untuk flow inti: start session, break detection, replay, end session, dan recovery.
+- [ ] Pisahkan state-machine session ke layer yang lebih mudah dites tanpa harus bergantung penuh pada SwiftUI lifecycle.
+- [ ] Tambahkan instrumentation ringan untuk debugging lifecycle dan notification state di build debug.
+
+### Product Follow-Ups
+- [ ] Tambahkan onboarding state agar user lama tidak selalu kembali ke layar onboarding.
+- [ ] Pertimbangkan histori sesi sederhana agar reflection tidak hanya tersedia untuk sesi terakhir.
+- [ ] Evaluasi apakah user perlu opsi edit contract saat sesi masih aktif atau tetap dikunci.
+
+### Demo and Research Follow-Ups
+- [ ] Siapkan skenario demo formal untuk tiga tone: `Supportive`, `Direct`, dan `Savage`.
+- [ ] Jalankan validasi produk kecil untuk mengecek apakah replay benar-benar terasa personal dan cukup kuat mengintervensi.
 
 ## Recommended Execution Order
 
