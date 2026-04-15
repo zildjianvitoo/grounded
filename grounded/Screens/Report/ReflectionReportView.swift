@@ -63,15 +63,15 @@ struct ReflectionReportView: View {
     }
 
     private var summaryText: String {
-        "You kept \(session.totalFocusTimeText.lowercased()) on \(contract.taskTitle.lowercased()). \(session.totalBreakTimeText) slipped away across \(session.breakCount) break\(session.breakCount == 1 ? "" : "s")."
+        "You stayed with \(contract.taskTitle.lowercased()) for \(session.reportFocusTimeText). \(session.reportBreakTimeText) slipped away across \(session.breakCount) break\(session.breakCount == 1 ? "" : "s")."
     }
 
     private var focusMetric: some View {
-        PactMetricCard(title: "Focused", value: session.totalFocusTimeText, caption: "Time spent on contract")
+        PactMetricCard(title: "Focused", value: session.reportFocusTimeText, caption: "Time spent on contract")
     }
 
     private var lostMetric: some View {
-        PactMetricCard(title: "Lost", value: session.totalBreakTimeText, caption: "Time spent away from it")
+        PactMetricCard(title: "Lost", value: session.reportBreakTimeText, caption: "Time spent away from it")
     }
 }
 

@@ -16,4 +16,8 @@ enum PactTimeFormatter {
         let minutes = max(totalSeconds, 0) / 60
         return "\(minutes)m \(suffix)"
     }
+
+    static func detailedSummaryLabel(from totalSeconds: Int, suffix: String) -> String {
+        "\(clockString(from: totalSeconds)) \(suffix)"
+    }
 }

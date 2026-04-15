@@ -150,6 +150,8 @@ struct PactAppFlow: View {
             statusLabel: persistedSession.status.displayName,
             totalFocusTimeText: PactTimeFormatter.summaryLabel(from: focusSeconds, suffix: "focused"),
             totalBreakTimeText: PactTimeFormatter.summaryLabel(from: breakSeconds, suffix: "lost"),
+            reportFocusTimeText: PactTimeFormatter.detailedSummaryLabel(from: focusSeconds, suffix: "focused"),
+            reportBreakTimeText: PactTimeFormatter.detailedSummaryLabel(from: breakSeconds, suffix: "lost"),
             breakCount: persistedSession.breakCount + (appState.currentBreak == nil ? 0 : 1)
         )
     }
