@@ -8,6 +8,7 @@ enum PactCardStyle {
 }
 
 struct PactCard<Content: View>: View {
+    @Environment(\.colorScheme) private var colorScheme
     var style: PactCardStyle = .paper
     var contentPadding: CGFloat = PactSpacing.large
     @ViewBuilder let content: Content
@@ -27,17 +28,33 @@ struct PactCard<Content: View>: View {
     private var background: some ShapeStyle {
         switch style {
         case .paper:
-            LinearGradient(
-                colors: [Color.pactSurface.opacity(0.97), Color.white.opacity(0.52)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            if colorScheme == .dark {
+                LinearGradient(
+                    colors: [Color.pactSurface, Color.pactElevatedSurface],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            } else {
+                LinearGradient(
+                    colors: [Color.pactSurface.opacity(0.97), Color.white.opacity(0.52)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
         case .muted:
-            LinearGradient(
-                colors: [Color.pactMutedSurface.opacity(0.96), Color.pactSurface.opacity(0.84)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            if colorScheme == .dark {
+                LinearGradient(
+                    colors: [Color.pactMutedSurface, Color.pactSurface],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            } else {
+                LinearGradient(
+                    colors: [Color.pactMutedSurface.opacity(0.96), Color.pactSurface.opacity(0.84)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
         case .dark:
             LinearGradient(
                 colors: [Color.pactDarkSurfaceRaised, Color.pactDarkSurface],
@@ -56,13 +73,13 @@ struct PactCard<Content: View>: View {
     private var borderColor: Color {
         switch style {
         case .paper:
-            return Color.pactHairline
+            return colorScheme == .dark ? Color.pactFieldBorder : Color.pactHairline
         case .muted:
             return Color.pactBorder.opacity(0.7)
         case .dark:
-            return Color.white.opacity(0.08)
+            return colorScheme == .dark ? Color.pactBorder.opacity(0.22) : Color.white.opacity(0.08)
         case .accent:
-            return Color.white.opacity(0.12)
+            return colorScheme == .dark ? Color.pactAccentSoft.opacity(0.34) : Color.white.opacity(0.12)
         }
     }
 

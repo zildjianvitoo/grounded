@@ -10,9 +10,9 @@ struct ConsequenceReplayView: View {
         VStack(alignment: .leading, spacing: PactSpacing.large) {
             PactCard(style: .accent) {
                 PactSectionHeader(
-                    eyebrow: "Focus Interrupted",
+                    eyebrow: "Break",
                     title: replay.breakDurationText,
-                    supportingText: "The reminder should feel like it came from your own contract, not from a nagging timer.",
+                    supportingText: "Here is your contract again.",
                     tone: .inverse
                 )
             }
@@ -35,7 +35,7 @@ struct ConsequenceReplayView: View {
 
                     PactSectionDivider()
 
-                    Text("Consequence")
+                    Text("What's at stake")
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactTextSecondary)
 
@@ -47,18 +47,18 @@ struct ConsequenceReplayView: View {
             }
 
             PactActionGroup {
-                PactPrimaryButton(title: "Resume Focus", action: onResumeFocus)
+                PactPrimaryButton(title: "Resume Session", action: onResumeFocus)
             } secondary: {
                 PactSecondaryButton(title: "End Session", action: {
                     isShowingEndSessionConfirmation = true
                 })
             }
         }
-        .confirmationDialog("End this session?", isPresented: $isShowingEndSessionConfirmation, titleVisibility: .visible) {
+        .alert("End this session?", isPresented: $isShowingEndSessionConfirmation) {
             Button("End Session", role: .destructive, action: onEndSession)
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will close the current focus session instead of returning you to focus.")
+            Text("This closes the session instead of returning you to it.")
         }
     }
 }

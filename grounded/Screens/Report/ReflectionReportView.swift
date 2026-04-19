@@ -10,9 +10,9 @@ struct ReflectionReportView: View {
         VStack(alignment: .leading, spacing: PactSpacing.large) {
             PactCard(style: .dark) {
                 PactSectionHeader(
-                    eyebrow: "Reflection Report",
-                    title: "Session closed",
-                    supportingText: "A short reflection makes the next focus promise easier to keep.",
+                    eyebrow: "Report",
+                    title: "Session complete",
+                    supportingText: "A quick summary of this session.",
                     tone: .inverse
                 )
             }
@@ -32,7 +32,7 @@ struct ReflectionReportView: View {
             PactMetricCard(
                 title: "Breaks",
                 value: "\(session.breakCount)",
-                caption: "Interruptions recorded during the session",
+                caption: "Breaks in this session",
                 style: .paper
             )
 
@@ -52,15 +52,14 @@ struct ReflectionReportView: View {
                     PactDetailList(
                         items: [
                             PactDetailItem(label: "Task", value: contract.taskTitle),
-                            PactDetailItem(label: "Reason", value: contract.whyItMatters),
-                            PactDetailItem(label: "Tone", value: contract.tone.displayName)
+                            PactDetailItem(label: "Why it matters", value: contract.whyItMatters)
                         ]
                     )
                 }
             }
 
             PactActionGroup {
-                PactPrimaryButton(title: "Start New Session", action: onStartNewSession)
+                PactPrimaryButton(title: "Start Again", action: onStartNewSession)
             } secondary: {
                 PactSecondaryButton(title: "Edit Contract", action: onReviewContract)
             }
@@ -68,15 +67,15 @@ struct ReflectionReportView: View {
     }
 
     private var summaryText: String {
-        "You stayed with \(contract.taskTitle.lowercased()) for \(session.reportFocusTimeText). \(session.reportBreakTimeText) slipped away across \(session.breakCount) break\(session.breakCount == 1 ? "" : "s")."
+        "\(session.reportFocusTimeText) focused. \(session.reportBreakTimeText) lost across \(session.breakCount) break\(session.breakCount == 1 ? "" : "s")."
     }
 
     private var focusMetric: some View {
-        PactMetricCard(title: "Focused", value: session.reportFocusTimeText, caption: "Time spent on contract", style: .dark)
+        PactMetricCard(title: "Focused", value: session.reportFocusTimeText, caption: "Time on task", style: .dark)
     }
 
     private var lostMetric: some View {
-        PactMetricCard(title: "Lost", value: session.reportBreakTimeText, caption: "Time spent away from it", style: .paper)
+        PactMetricCard(title: "Lost", value: session.reportBreakTimeText, caption: "Time away", style: .paper)
     }
 }
 

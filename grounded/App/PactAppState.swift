@@ -98,7 +98,7 @@ final class PactAppState {
         let draft = contractDraft
         guard draft.isReady, let durationMinutes = draft.parsedDurationMinutes else {
             PactHaptics.warning()
-            errorMessage = "Please complete the contract and use a duration greater than zero."
+            errorMessage = "Complete the contract and enter a duration above 0."
             return
         }
 
@@ -131,7 +131,7 @@ final class PactAppState {
             }
         } catch {
             PactHaptics.warning()
-            errorMessage = "Couldn't start the focus session. Please try again."
+            errorMessage = "Couldn't start the session. Try again."
         }
     }
 
@@ -172,7 +172,7 @@ final class PactAppState {
                 }
             }
         } catch {
-            errorMessage = "Couldn't record the focus break."
+            errorMessage = "Couldn't record the break."
         }
     }
 
@@ -203,7 +203,7 @@ final class PactAppState {
             }
         } catch {
             PactHaptics.warning()
-            errorMessage = "Couldn't restore the session after the break."
+            errorMessage = "Couldn't restore the session."
         }
     }
 
@@ -240,7 +240,7 @@ final class PactAppState {
             }
         } catch {
             PactHaptics.warning()
-            errorMessage = "Couldn't finalize the session summary."
+            errorMessage = "Couldn't finish the session."
         }
     }
 
@@ -278,7 +278,7 @@ final class PactAppState {
             return nil
         }
 
-        return "Break alerts are off in Settings. Pact will still show the contract replay when you come back."
+        return "Break alerts are off. Pact will show the contract when you return."
     }
 
     private func focusedSeconds(for session: FocusSession, asOf now: Date) -> Int {
@@ -320,7 +320,7 @@ final class PactAppState {
             return true
         } catch {
             PactHaptics.warning()
-            errorMessage = "Couldn't close the focus session when time ran out."
+            errorMessage = "Couldn't close the session automatically."
             return false
         }
     }

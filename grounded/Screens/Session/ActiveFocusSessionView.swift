@@ -45,15 +45,14 @@ struct ActiveFocusSessionView: View {
 
             PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
-                    Text("Contract reminder")
+                    Text("Contract")
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactTextSecondary)
 
                     PactDetailList(
                         items: [
                             PactDetailItem(label: "Why it matters", value: contract.whyItMatters),
-                            PactDetailItem(label: "What is at stake", value: contract.consequenceText),
-                            PactDetailItem(label: "Tone", value: contract.tone.displayName)
+                            PactDetailItem(label: "What's at stake", value: contract.consequenceText)
                         ]
                     )
                 }
@@ -61,11 +60,11 @@ struct ActiveFocusSessionView: View {
 
             PactCard(style: .accent) {
                 VStack(alignment: .leading, spacing: PactSpacing.small) {
-                    Text("If focus breaks")
+                    Text("If you leave")
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactTextInverse.opacity(0.78))
 
-                    Text("Leave the app and come back to see the contract replay that pulls you into focus again.")
+                    Text("Pact will show your contract when you come back.")
                         .font(PactTypography.bodyStrong)
                         .foregroundStyle(Color.pactTextInverse)
                         .fixedSize(horizontal: false, vertical: true)
@@ -85,11 +84,11 @@ struct ActiveFocusSessionView: View {
                 isShowingEndSessionConfirmation = true
             })
         }
-        .confirmationDialog("End this session?", isPresented: $isShowingEndSessionConfirmation, titleVisibility: .visible) {
+        .alert("End this session?", isPresented: $isShowingEndSessionConfirmation) {
             Button("End Session", role: .destructive, action: onEndSession)
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will stop the timer and close the current focus session.")
+            Text("This stops the timer and closes this session.")
         }
     }
 

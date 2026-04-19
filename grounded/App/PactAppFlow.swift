@@ -16,7 +16,7 @@ struct PactAppFlow: View {
             PactScreenContainer {
                 routeContent
             }
-            .navigationTitle("Pact")
+            .navigationTitle(appState.route.title)
             .navigationBarTitleDisplayMode(.inline)
             .alert("Pact", isPresented: errorBinding) {
                 Button("OK") {
@@ -171,7 +171,7 @@ struct PactAppFlow: View {
         ?? 0
 
         return MockReplayData(
-            breakDurationText: "You broke focus for \(PactTimeFormatter.clockString(from: replayBreakSeconds)).",
+            breakDurationText: "Away for \(PactTimeFormatter.clockString(from: replayBreakSeconds)).",
             reminderText: PactInterventionText.replayReminder(for: persistedContract),
             consequenceText: PactInterventionText.replayConsequence(for: persistedContract)
         )

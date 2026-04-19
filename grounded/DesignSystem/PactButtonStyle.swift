@@ -11,20 +11,11 @@ struct PactPrimaryButtonStyle: ButtonStyle {
             .padding(.vertical, 16)
             .background(
                 Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.pactTextPrimary.opacity(configuration.isPressed ? 0.9 : 1),
-                                Color.pactAccent.opacity(configuration.isPressed ? 0.88 : 1)
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
+                    .fill(Color.pactAccent.opacity(configuration.isPressed ? 0.88 : 1))
             )
             .overlay {
                 Capsule()
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
+                    .stroke(Color.pactAccentSoft.opacity(configuration.isPressed ? 0.28 : 0.22), lineWidth: 1)
             }
             .shadow(color: Color.pactShadow.opacity(0.75), radius: 16, x: 0, y: 10)
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
@@ -33,6 +24,8 @@ struct PactPrimaryButtonStyle: ButtonStyle {
 }
 
 struct PactSecondaryButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) private var colorScheme
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(PactTypography.bodyStrong)
@@ -43,14 +36,30 @@ struct PactSecondaryButtonStyle: ButtonStyle {
             .padding(.vertical, 16)
             .background(
                 Capsule()
-                    .fill(Color.pactSurface.opacity(configuration.isPressed ? 0.9 : 0.74))
+                    .fill(secondaryFill(isPressed: configuration.isPressed))
             )
             .overlay {
                 Capsule()
-                    .stroke(Color.pactHairline.opacity(configuration.isPressed ? 0.95 : 1), lineWidth: 1)
+                    .stroke(secondaryBorder(isPressed: configuration.isPressed), lineWidth: 1)
             }
             .opacity(configuration.isPressed ? 0.85 : 1)
             .scaleEffect(configuration.isPressed ? 0.99 : 1)
             .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+    }
+
+    private func secondaryFill(isPressed: Bool) -> Color {
+        if colorScheme == .dark {
+            return Color.pactElevatedSurface.opacity(isPressed ? 0.94 : 1)
+        }
+
+        return Color.pactSurface.opacity(isPressed ? 0.9 : 0.74)
+    }
+
+    private func secondaryBorder(isPressed: Bool) -> Color {
+        if colorScheme == .dark {
+            return Color.pactFieldBorder.opacity(isPressed ? 1 : 0.92)
+        }
+
+        return Color.pactHairline.opacity(isPressed ? 0.95 : 1)
     }
 }

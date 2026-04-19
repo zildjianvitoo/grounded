@@ -1,16 +1,17 @@
 import SwiftUI
 
 struct PactTonePicker: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Binding var selection: MockFocusContract.Tone
 
     var body: some View {
         VStack(alignment: .leading, spacing: PactSpacing.medium) {
             VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
-                Text("Intervention Tone")
+                Text("Reminder Tone")
                     .font(PactTypography.label)
                     .foregroundStyle(Color.pactTextSecondary)
 
-                Text("This changes the intervention preview below.")
+                Text("Changes the preview below.")
                     .font(PactTypography.label)
                     .foregroundStyle(Color.pactTextSecondary.opacity(0.78))
                     .fixedSize(horizontal: false, vertical: true)
@@ -63,20 +64,28 @@ struct PactTonePicker: View {
     private func description(for tone: MockFocusContract.Tone) -> String {
         switch tone {
         case .supportive:
-            "Warm, steady, and encouraging"
+            "Warm and steady"
         case .direct:
-            "Clear, firm, and uncluttered"
+            "Clear and firm"
         case .savage:
-            "Sharp, never insulting"
+            "Sharp and blunt"
         }
     }
 
     private func backgroundColor(for tone: MockFocusContract.Tone) -> Color {
-        tone == selection ? Color.pactSurface.opacity(0.95) : Color.white.opacity(0.3)
+        if colorScheme == .dark {
+            return tone == selection ? Color.pactDarkSurfaceRaised : Color.pactElevatedSurface
+        }
+
+        return tone == selection ? Color.pactSurface.opacity(0.95) : Color.white.opacity(0.3)
     }
 
     private func borderColor(for tone: MockFocusContract.Tone) -> Color {
-        tone == selection ? Color.pactAccent : Color.pactBorder
+        if colorScheme == .dark {
+            return tone == selection ? Color.pactAccent : Color.pactFieldBorder
+        }
+
+        return tone == selection ? Color.pactAccent : Color.pactBorder
     }
 
     private func accentColor(for tone: MockFocusContract.Tone) -> Color {

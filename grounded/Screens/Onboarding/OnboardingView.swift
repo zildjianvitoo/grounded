@@ -8,8 +8,8 @@ struct OnboardingView: View {
             PactCard(style: .accent) {
                 PactSectionHeader(
                     eyebrow: "Welcome",
-                    title: "Focus is a promise, not just a timer.",
-                    supportingText: "Pact asks what you need to finish, why it matters, and what gets heavier if you drift away. When you break the session, the app reflects that promise back to you.",
+                    title: "Focus with a contract.",
+                    supportingText: "Write what you're doing, why it matters, and what happens if you drift.",
                     tone: .inverse
                 )
             }
@@ -22,13 +22,13 @@ struct OnboardingView: View {
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactTextSecondary)
 
-                    PactTimelineRow(index: "1", title: "Write the contract", detail: "Task, duration, reason, and consequence.")
-                    PactTimelineRow(index: "2", title: "Start focus", detail: "Keep the phone near you while the real work happens elsewhere.")
-                    PactTimelineRow(index: "3", title: "Get pulled back", detail: "If you break focus, the app shows what you said was at stake.")
+                    PactTimelineRow(index: "1", title: "Write it down", detail: "Task, time, reason, and stakes.")
+                    PactTimelineRow(index: "2", title: "Start a session", detail: "Keep focus while the work happens elsewhere.")
+                    PactTimelineRow(index: "3", title: "Come back to it", detail: "If you leave, Pact shows your contract again.")
                 }
             }
 
-            PactPrimaryButton(title: "Start Your Contract", action: onContinue)
+            PactPrimaryButton(title: "Create Contract", action: onContinue)
         }
     }
 
@@ -37,15 +37,15 @@ struct OnboardingView: View {
             PactFeatureCard(
                 style: .paper,
                 symbol: "laptopcomputer.and.iphone",
-                title: "Built for deep work",
-                detail: "Made for moments when the main task lives on your laptop."
+                title: "Made for laptop work",
+                detail: "Keep your phone nearby while the real task stays on your computer."
             )
 
             PactFeatureCard(
                 style: .muted,
                 symbol: "exclamationmark.bubble",
-                title: "Personal intervention",
-                detail: "The app uses your own reason and consequence, so the reminder feels specific instead of generic."
+                title: "Your own reminder",
+                detail: "If you drift, Pact brings back the words you wrote."
             )
         }
     }

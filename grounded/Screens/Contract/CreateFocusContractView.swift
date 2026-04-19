@@ -26,8 +26,8 @@ struct CreateFocusContractView: View {
             PactCard(style: .paper) {
                 PactSectionHeader(
                     eyebrow: "Focus Contract",
-                    title: "Build the contract before you begin",
-                    supportingText: "A stronger contract gives the app a more honest way to pull you back when you break focus."
+                    title: "Create your contract",
+                    supportingText: "Set the task, time, and stakes before you begin."
                 )
             }
 
@@ -77,7 +77,7 @@ struct CreateFocusContractView: View {
                             }
 
                             if draft.showsInvalidDurationHint {
-                                Text("Enter a duration greater than 0 minutes.")
+                                Text("Enter a duration above 0.")
                                     .font(PactTypography.label)
                                     .foregroundStyle(Color.pactAccent)
                             }
@@ -87,15 +87,15 @@ struct CreateFocusContractView: View {
                     PactFormField(title: "Why this matters") {
                         PactTextEditor(
                             text: $draft.whyItMatters,
-                            prompt: "Tomorrow's review gets easier if tonight's thinking is already clear.",
+                            prompt: "Why does this matter right now?",
                             accessibilityLabel: "Why this matters"
                         )
                     }
 
-                    PactFormField(title: "What is at stake") {
+                    PactFormField(title: "What's at stake") {
                         PactTextEditor(
                             text: $draft.consequenceText,
-                            prompt: "If this slips again, the whole handoff gets heavier for the team.",
+                            prompt: "What gets worse if you drift?",
                             accessibilityLabel: "What is at stake"
                         )
                     }
@@ -106,7 +106,7 @@ struct CreateFocusContractView: View {
 
             PactCard(style: .dark) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
-                    Text("Intervention Preview")
+                    Text("Preview")
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactAccentSoft)
 
@@ -122,7 +122,7 @@ struct CreateFocusContractView: View {
             }
 
             PactPrimaryButton(
-                title: "Start Focus Session",
+                title: "Start Session",
                 isEnabled: draft.isReady,
                 action: { onStartFocus(draft) }
             )
@@ -149,11 +149,11 @@ struct CreateFocusContractView: View {
     private var previewTitle: String {
         switch draft.tone {
         case .supportive:
-            "Stay with the promise."
+            "Stay with it."
         case .direct:
             "Back to the contract."
         case .savage:
-            "You wrote this. Honor it."
+            "You wrote this."
         }
     }
 
@@ -169,7 +169,7 @@ struct CreateFocusContractView: View {
             return consequence
         }
 
-        return "The app will turn your own reason and consequence into the reminder that brings you back."
+        return "Your reminder will use what you write above."
     }
 }
 
@@ -242,6 +242,7 @@ extension CreateFocusContractView {
 }
 
 private struct PactFormField<Field: View>: View {
+    @Environment(\.colorScheme) private var colorScheme
     let title: String
     @ViewBuilder let field: Field
 
@@ -254,10 +255,10 @@ private struct PactFormField<Field: View>: View {
             field
                 .padding(.horizontal, 14)
                 .padding(.vertical, 12)
-                .background(Color.white.opacity(0.3), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .background(Color.pactFieldFill, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .stroke(Color.pactHairline, lineWidth: 1)
+                        .stroke(colorScheme == .dark ? Color.pactFieldBorder : Color.pactHairline, lineWidth: 1)
                 }
         }
     }
