@@ -9,7 +9,7 @@ enum PactTimeFormatter {
     }
 
     static func elapsedLabel(from totalSeconds: Int) -> String {
-        "\(clockString(from: totalSeconds)) elapsed"
+        clockString(from: totalSeconds)
     }
 
     static func summaryLabel(from totalSeconds: Int, suffix: String) -> String {

@@ -4,14 +4,16 @@ struct ConsequenceReplayView: View {
     let replay: MockReplayData
     let onResumeFocus: () -> Void
     let onEndSession: () -> Void
+    @State private var isShowingEndSessionConfirmation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: PactSpacing.large) {
-            PactCard {
+            PactCard(style: .accent) {
                 PactSectionHeader(
                     eyebrow: "Focus Interrupted",
                     title: replay.breakDurationText,
-                    supportingText: "The reminder should feel like it came from your own contract, not from a nagging timer."
+                    supportingText: "The reminder should feel like it came from your own contract, not from a nagging timer.",
+                    tone: .inverse
                 )
             }
 
@@ -20,7 +22,7 @@ struct ConsequenceReplayView: View {
                 bodyText: replay.reminderText
             )
 
-            PactCard {
+            PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
                     Text("Why this matters")
                         .font(PactTypography.label)
@@ -31,15 +33,14 @@ struct ConsequenceReplayView: View {
                         .foregroundStyle(Color.pactTextPrimary)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Divider()
-                        .overlay(Color.pactBorder)
+                    PactSectionDivider()
 
                     Text("Consequence")
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactTextSecondary)
 
                     Text(replay.consequenceText)
-                        .font(PactTypography.screenTitle)
+                        .font(PactTypography.display)
                         .foregroundStyle(Color.pactTextPrimary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -48,8 +49,16 @@ struct ConsequenceReplayView: View {
             PactActionGroup {
                 PactPrimaryButton(title: "Resume Focus", action: onResumeFocus)
             } secondary: {
-                PactSecondaryButton(title: "End Session", action: onEndSession)
+                PactSecondaryButton(title: "End Session", action: {
+                    isShowingEndSessionConfirmation = true
+                })
             }
+        }
+        .confirmationDialog("End this session?", isPresented: $isShowingEndSessionConfirmation, titleVisibility: .visible) {
+            Button("End Session", role: .destructive, action: onEndSession)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will close the current focus session instead of returning you to focus.")
         }
     }
 }

@@ -5,31 +5,31 @@ struct BreakAlertPreviewView: View {
     let bodyText: String
 
     var body: some View {
-        PactCard {
+        PactCard(style: .dark) {
             VStack(alignment: .leading, spacing: PactSpacing.medium) {
                 HStack(spacing: PactSpacing.small) {
                     Image(systemName: "bell.badge.fill")
-                        .foregroundStyle(Color.pactAccent)
+                        .foregroundStyle(Color.pactAccentSoft)
 
                     Text("Notification Preview")
                         .font(PactTypography.label)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactTextInverse.opacity(0.66))
 
                     Spacer(minLength: 0)
 
                     Text("now")
                         .font(PactTypography.label)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactTextInverse.opacity(0.66))
                 }
 
                 VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
                     Text(title)
-                        .font(PactTypography.body.weight(.semibold))
-                        .foregroundStyle(Color.pactTextPrimary)
+                        .font(PactTypography.bodyStrong)
+                        .foregroundStyle(Color.pactTextInverse)
 
                     Text(bodyText)
                         .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactTextInverse.opacity(0.76))
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }

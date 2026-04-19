@@ -6,7 +6,7 @@ struct LiveActivityPreviewView: View {
     let statusText: String
 
     var body: some View {
-        PactCard {
+        PactCard(style: .paper) {
             VStack(alignment: .leading, spacing: PactSpacing.medium) {
                 HStack {
                     Text("Live Activity")
@@ -19,12 +19,12 @@ struct LiveActivityPreviewView: View {
                 }
 
                 Text(taskTitle)
-                    .font(PactTypography.body.weight(.semibold))
+                    .font(PactTypography.bodyStrong)
                     .foregroundStyle(Color.pactTextPrimary)
                     .lineLimit(2)
 
                 Text(timerText)
-                    .font(PactTypography.metric)
+                    .font(PactTypography.display)
                     .foregroundStyle(Color.pactAccent)
             }
         }

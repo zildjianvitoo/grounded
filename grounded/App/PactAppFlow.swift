@@ -6,7 +6,9 @@ struct PactAppFlow: View {
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \FocusSession.startedAt, order: .reverse) private var sessions: [FocusSession]
     @Query(sort: \FocusContract.createdAt, order: .reverse) private var contracts: [FocusContract]
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var appState = PactAppState()
+    @State private var isShowingOnboarding = false
     @State private var now = Date()
 
     var body: some View {
@@ -23,6 +25,15 @@ struct PactAppFlow: View {
             } message: {
                 Text(appState.errorMessage ?? "")
             }
+            .fullScreenCover(isPresented: $isShowingOnboarding) {
+                PactScreenContainer {
+                    OnboardingView(
+                        onContinue: {
+                            completeOnboarding()
+                        }
+                    )
+                }
+            }
             .task {
                 while !Task.isCancelled {
                     now = Date()
@@ -37,6 +48,7 @@ struct PactAppFlow: View {
                     in: modelContext,
                     now: now
                 )
+                updateOnboardingPresentation()
             }
             .onChange(of: sessions.count) { _, _ in
                 appState.recoverFromPersistence(
@@ -46,6 +58,7 @@ struct PactAppFlow: View {
                     in: modelContext,
                     now: now
                 )
+                updateOnboardingPresentation()
             }
             .onChange(of: now) { _, newNow in
                 appState.handleClockTick(newNow, in: modelContext)
@@ -59,28 +72,8 @@ struct PactAppFlow: View {
     @ViewBuilder
     private var routeContent: some View {
         switch appState.route {
-        case .onboarding:
-            OnboardingView(
-                onContinue: { appState.route = .contract },
-                onUseSampleContract: {
-                    appState.loadSampleContract()
-                    appState.route = .contract
-                }
-            )
         case .contract:
-            CreateFocusContractView(
-                draft: appState.contractDraft,
-                onStartFocus: { draft in
-                    appState.updateDraft(draft)
-                    appState.startSession(in: modelContext)
-                },
-                onLoadSample: {
-                    appState.loadSampleContract()
-                },
-                onDraftChanged: { draft in
-                    appState.updateDraft(draft)
-                }
-            )
+            contractView
         case .activeSession:
             ActiveFocusSessionView(
                 contract: displayContract,
@@ -106,6 +99,19 @@ struct PactAppFlow: View {
                 onReviewContract: { appState.reviewCurrentContract() }
             )
         }
+    }
+
+    private var contractView: some View {
+        CreateFocusContractView(
+            draft: appState.contractDraft,
+            onStartFocus: { draft in
+                appState.updateDraft(draft)
+                appState.startSession(in: modelContext)
+            },
+            onDraftChanged: { draft in
+                appState.updateDraft(draft)
+            }
+        )
     }
 
     private var persistedContract: FocusContract? {
@@ -144,7 +150,6 @@ struct PactAppFlow: View {
 
         return MockFocusSession(
             taskTitle: persistedSession.contract?.taskTitle ?? displayContract.taskTitle,
-            reasonSummary: persistedSession.contract?.whyItMatters ?? displayContract.whyItMatters,
             remainingTimeText: PactTimeFormatter.clockString(from: remainingSeconds),
             elapsedTimeText: PactTimeFormatter.elapsedLabel(from: elapsedSeconds),
             statusLabel: persistedSession.status.displayName,
@@ -189,6 +194,20 @@ struct PactAppFlow: View {
                 }
             }
         )
+    }
+
+    private func updateOnboardingPresentation() {
+        isShowingOnboarding =
+            !hasCompletedOnboarding &&
+            sessions.isEmpty &&
+            contracts.isEmpty &&
+            appState.currentSession == nil
+    }
+
+    private func completeOnboarding() {
+        hasCompletedOnboarding = true
+        isShowingOnboarding = false
+        appState.route = .contract
     }
 }
 

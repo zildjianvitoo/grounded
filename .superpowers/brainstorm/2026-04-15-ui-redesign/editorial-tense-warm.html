@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pact Redesign Direction</title>
+  <style>
+    :root {
+      --bg: #f5ecdd;
+      --paper: #fbf6ee;
+      --ink: #1d160f;
+      --muted: #675a4d;
+      --line: rgba(39, 25, 10, 0.14);
+      --accent: #9f3415;
+      --accent-soft: #d97745;
+      --olive: #5c6440;
+      --shadow: 0 20px 50px rgba(38, 23, 9, 0.12);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+      background:
+        radial-gradient(circle at top left, rgba(217,119,69,0.12), transparent 26%),
+        radial-gradient(circle at top right, rgba(92,100,64,0.10), transparent 22%),
+        linear-gradient(180deg, #f7efe2 0%, #f2e6d6 100%);
+      color: var(--ink);
+    }
+
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 48px 28px 80px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .hero-panel, .direction-panel, .screen {
+      background: rgba(251, 246, 238, 0.85);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-panel {
+      padding: 28px 28px 34px;
+      min-height: 250px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-panel::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -80px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(159,52,21,0.16), transparent 65%);
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 18px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: 58px;
+      line-height: 0.95;
+      max-width: 9ch;
+      font-weight: 700;
+    }
+
+    .hero-copy {
+      max-width: 56ch;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 17px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    .direction-panel {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 250px;
+    }
+
+    .token {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .token:last-child { border-bottom: none; }
+    .token strong { color: var(--ink); }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .screen {
+      padding: 16px;
+      min-height: 760px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone {
+      border-radius: 30px;
+      border: 1px solid rgba(25, 15, 8, 0.1);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.08)),
+        linear-gradient(180deg, #f8efe2 0%, #efe0cf 100%);
+      padding: 18px;
+      min-height: 728px;
+      position: relative;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 170px;
+      background: linear-gradient(180deg, rgba(159,52,21,0.18), transparent);
+      pointer-events: none;
+    }
+
+    .screen-title {
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .display-card {
+      border-radius: 28px;
+      padding: 22px;
+      background: rgba(255, 251, 246, 0.82);
+      border: 1px solid rgba(34, 21, 8, 0.12);
+      box-shadow: 0 16px 35px rgba(32, 18, 7, 0.08);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .display-card.dark {
+      background: linear-gradient(180deg, #2a1d14, #1c140f);
+      color: #f8ecdf;
+      border-color: rgba(255,255,255,0.06);
+    }
+
+    .display-card.accent {
+      background: linear-gradient(145deg, rgba(159,52,21,0.94), rgba(106,31,13,0.98));
+      color: #fff4ea;
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .section-kicker {
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: inherit;
+      opacity: 0.72;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: 38px;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+
+    .subtext {
+      margin-top: 14px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      line-height: 1.52;
+      color: inherit;
+      opacity: 0.86;
+      font-size: 15px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .stat {
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid rgba(27, 18, 10, 0.1);
+      background: rgba(255,255,255,0.45);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: #f9efe3;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+      border-color: rgba(27, 18, 10, 0.16);
+    }
+
+    .field {
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(32, 21, 11, 0.1);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    .field:last-child { border-bottom: none; }
+    .field-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .field-value {
+      font-size: 18px;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    .tone-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid rgba(27, 18, 10, 0.1);
+      color: var(--muted);
+      background: rgba(255,255,255,0.4);
+    }
+
+    .pill.active {
+      color: #fff1e4;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .timer {
+      font-size: 76px;
+      line-height: 0.95;
+      margin: 6px 0 8px;
+      letter-spacing: -0.05em;
+    }
+
+    .ribbon {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .ribbon-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f4b183;
+    }
+
+    .annotation {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+    }
+
+    @media (max-width: 1100px) {
+      .hero, .screens { grid-template-columns: 1fr; }
+      .screen { min-height: auto; }
+      .phone { min-height: auto; }
+      h1 { font-size: 46px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-panel">
+        <div class="eyebrow">Pact Redesign Direction</div>
+        <h1>Editorial Tense Warm</h1>
+        <div class="hero-copy">
+          Redesign ini menjaga warmth dari Pact, tapi memberi lebih banyak ketegangan visual: tipografi lebih berani, lapisan lebih dalam, kartu tidak lagi terasa seragam, dan tiap layar punya focal point yang lebih kuat. Hasilnya harus terasa personal, premium, dan sedikit menekan secara emosional, tanpa kehilangan rasa Apple-native.
+        </div>
+      </div>
+
+      <div class="direction-panel">
+        <div class="eyebrow">What Will Change</div>
+        <div class="token"><strong>Background</strong><span>Layered gradients + glow pockets, bukan flat solid fill.</span></div>
+        <div class="token"><strong>Cards</strong><span>Kombinasi paper card, dark emphasis, dan accent panels.</span></div>
+        <div class="token"><strong>Typography</strong><span>Hero serif + crisp sans, lebih editorial dan tegang.</span></div>
+        <div class="token"><strong>Hierarchy</strong><span>Setiap screen punya 1 dominant block, bukan semua rata pentingnya.</span></div>
+        <div class="token"><strong>Motion</strong><span>Subtle signature: layered entrance dan emphasis ringan.</span></div>
+      </div>
+    </section>
+
+    <section class="screens">
+      <article class="screen">
+        <div class="screen-title">Onboarding</div>
+        <div class="phone">
+          <div class="display-card accent">
+            <div class="section-kicker">Welcome</div>
+            <h2 class="headline">Focus is a promise, not a timer.</h2>
+            <div class="subtext">Hero block jadi jangkar emosional. Kalimat utama lebih besar, lebih dominan, dan membawa ketegangan dari awal.</div>
+          </div>
+
+          <div class="display-card">
+            <div class="section-kicker">How Pact Works</div>
+            <div class="field">
+              <div class="field-label">1. Write the contract</div>
+              <div class="field-value">Task, reason, and cost ditaruh sebagai janji yang akan dikembalikan ke kamu.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">2. Start focus</div>
+              <div class="field-value">Satu layar fokus yang lebih tenang, tapi tetap punya tekanan visual yang jelas.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">3. Feel the consequence</div>
+              <div class="field-value">Kalau kamu keluar, replay screen terasa seperti kontrakmu sendiri yang menatap balik.</div>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <div class="button primary">Start Your Contract</div>
+            <div class="button secondary">Use Sample Contract</div>
+          </div>
+
+          <div class="annotation">Perubahan utama: onboarding tidak lagi kumpulan kartu setara. Sekarang ada hero statement, baru informasi pendukung.</div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="screen-title">Create Contract</div>
+        <div class="phone">
+          <div class="display-card">
+            <div class="section-kicker">Focus Contract</div>
+            <h2 class="headline" style="font-size:44px;">Build the contract before you begin.</h2>
+            <div class="subtext">Form dibingkai seperti editorial worksheet, bukan sekadar stack field netral.</div>
+          </div>
+
+          <div class="display-card">
+            <div class="field">
+              <div class="field-label">Task</div>
+              <div class="field-value">Finish the API review notes</div>
+            </div>
+            <div class="field">
+              <div class="field-label">Duration</div>
+              <div class="field-value">45 minutes</div>
+            </div>
+            <div class="field">
+              <div class="field-label">Why It Matters</div>
+              <div class="field-value">Tomorrow's review gets lighter if tonight's thinking is already clear.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">What Is at Stake</div>
+              <div class="field-value">If this slips again, the whole handoff gets heavier for the team.</div>
+            </div>
+
+            <div class="tone-pills">
+              <div class="pill">Supportive</div>
+              <div class="pill active">Direct</div>
+              <div class="pill">Savage</div>
+            </div>
+          </div>
+
+          <div class="display-card dark">
+            <div class="section-kicker">Intervention Preview</div>
+            <div style="font-size:28px; line-height:1.04; margin-bottom:10px;">Back to the contract.</div>
+            <div class="subtext" style="color:#ecd8c8;">The reminder block jadi lebih dramatic, jadi tone selection terasa punya konsekuensi visual.</div>
+          </div>
+
+          <div class="button-row">
+            <div class="button primary">Start Focus Session</div>
+          </div>
+
+          <div class="annotation">Perubahan utama: tone preview diberi panggung yang lebih besar, sehingga keseluruhan layar punya karakter dan ritme.</div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="screen-title">Active Session</div>
+        <div class="phone">
+          <div class="display-card dark">
+            <div class="section-kicker">Focus Session</div>
+            <div class="ribbon"><span class="ribbon-dot"></span> Focus Active</div>
+            <div class="timer">27:14</div>
+            <div style="font-size:24px; line-height:1.1;">Finish the API review notes</div>
+            <div class="subtext" style="color:#ecd8c8;">Timer dan status jadi focal point tunggal. Screen ini harus terasa seperti ruang fokus, bukan dashboard.</div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat">
+              <div class="stat-value">17:46</div>
+              <div class="stat-label">Elapsed</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Breaks</div>
+            </div>
+          </div>
+
+          <div class="display-card">
+            <div class="section-kicker">Contract Reminder</div>
+            <div class="field">
+              <div class="field-label">Why It Matters</div>
+              <div class="field-value">Tomorrow's mentor review will move faster if the thinking is already clear tonight.</div>
+            </div>
+            <div class="field">
+              <div class="field-label">What Is at Stake</div>
+              <div class="field-value">If this drifts again, the whole handoff gets heavier and the team pays for your delay.</div>
+            </div>
+          </div>
+
+          <div class="display-card accent">
+            <div class="section-kicker">If Focus Breaks</div>
+            <div style="font-size:24px; line-height:1.08;">The contract comes back sharper than a generic reminder.</div>
+          </div>
+
+          <div class="button-row">
+            <div class="button secondary">End Session</div>
+          </div>
+
+          <div class="annotation">Perubahan utama: session screen jadi lebih dramatic dan less flat lewat dark hero surface, angka timer besar, dan depth antar section.</div>
+        </div>
+      </article>
+    </section>
+  </div>
+</body>
+</html>

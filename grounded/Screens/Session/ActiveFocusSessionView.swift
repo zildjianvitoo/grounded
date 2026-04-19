@@ -5,26 +5,28 @@ struct ActiveFocusSessionView: View {
     let session: MockFocusSession
     let breakAlertSupportMessage: String?
     let onEndSession: () -> Void
+    @ScaledMetric(relativeTo: .largeTitle) private var countdownSize = 64
+    @State private var isShowingEndSessionConfirmation = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: PactSpacing.large) {
-            PactCard {
-                VStack(alignment: .leading, spacing: PactSpacing.medium) {
-                    HStack {
-                        PactSectionHeader(
-                            eyebrow: "Focus Session",
-                            title: session.remainingTimeText,
-                            supportingText: session.taskTitle
-                        )
-
-                        Spacer(minLength: 0)
-                    }
-
+            PactCard(style: .dark) {
+                VStack(alignment: .leading, spacing: PactSpacing.small) {
+                    
                     PactStatusBadge(text: session.statusLabel)
+                        .padding(.bottom, 2)
 
-                    Text(session.reasonSummary)
-                        .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextSecondary)
+                    Text(session.remainingTimeText)
+                        .font(.system(size: countdownSize, weight: .bold, design: .serif))
+                        .foregroundStyle(Color.pactTextInverse)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .padding(.top, 2)
+
+                    Text(session.taskTitle)
+                        .font(PactTypography.screenTitle)
+                        .foregroundStyle(Color.pactTextInverse)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
@@ -41,83 +43,68 @@ struct ActiveFocusSessionView: View {
                 }
             }
 
-            LiveActivityPreviewView(
-                taskTitle: contract.taskTitle,
-                timerText: session.remainingTimeText,
-                statusText: session.statusLabel
-            )
-
-            PactCard {
+            PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
                     Text("Contract reminder")
                         .font(PactTypography.label)
                         .foregroundStyle(Color.pactTextSecondary)
 
-                    ActiveSessionContractRow(label: "Why it matters", value: contract.whyItMatters)
-                    ActiveSessionContractRow(label: "What is at stake", value: contract.consequenceText)
-                    ActiveSessionContractRow(label: "Tone", value: contract.tone.displayName)
+                    PactDetailList(
+                        items: [
+                            PactDetailItem(label: "Why it matters", value: contract.whyItMatters),
+                            PactDetailItem(label: "What is at stake", value: contract.consequenceText),
+                            PactDetailItem(label: "Tone", value: contract.tone.displayName)
+                        ]
+                    )
                 }
             }
 
-            PactCard {
+            PactCard(style: .accent) {
                 VStack(alignment: .leading, spacing: PactSpacing.small) {
                     Text("If focus breaks")
                         .font(PactTypography.label)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactTextInverse.opacity(0.78))
 
                     Text("Leave the app and come back to see the contract replay that pulls you into focus again.")
-                        .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .font(PactTypography.bodyStrong)
+                        .foregroundStyle(Color.pactTextInverse)
                         .fixedSize(horizontal: false, vertical: true)
 
                     if let breakAlertSupportMessage {
-                        Divider()
-                            .overlay(Color.pactBorder)
+                        PactSectionDivider(tone: .inverse)
 
                         Text(breakAlertSupportMessage)
                             .font(PactTypography.body)
-                            .foregroundStyle(Color.pactAccent)
+                            .foregroundStyle(Color.pactTextInverse.opacity(0.78))
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
 
-            PactSecondaryButton(title: "End Session", action: onEndSession)
+            PactSecondaryButton(title: "End Session", action: {
+                isShowingEndSessionConfirmation = true
+            })
+        }
+        .confirmationDialog("End this session?", isPresented: $isShowingEndSessionConfirmation, titleVisibility: .visible) {
+            Button("End Session", role: .destructive, action: onEndSession)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will stop the timer and close the current focus session.")
         }
     }
 
     private var elapsedMetric: some View {
-        PactMetricCard(
-            title: "Elapsed",
+        PactCompactMetricCard(
             value: session.elapsedTimeText,
-            caption: "Time spent honoring the current contract"
+            label: "Elapsed"
         )
     }
 
     private var breakMetric: some View {
-        PactMetricCard(
-            title: "Breaks",
+        PactCompactMetricCard(
             value: "\(session.breakCount)",
-            caption: "Interruptions already recorded in this session"
+            label: "Breaks"
         )
-    }
-}
-
-private struct ActiveSessionContractRow: View {
-    let label: String
-    let value: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
-            Text(label.uppercased())
-                .font(PactTypography.label)
-                .foregroundStyle(Color.pactTextSecondary)
-
-            Text(value)
-                .font(PactTypography.body)
-                .foregroundStyle(Color.pactTextPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
     }
 }
 

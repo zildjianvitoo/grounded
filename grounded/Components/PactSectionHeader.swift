@@ -1,18 +1,26 @@
 import SwiftUI
 
 struct PactSectionHeader: View {
+    enum Tone {
+        case standard
+        case inverse
+    }
+
     let eyebrow: String?
     let title: String
     let supportingText: String
+    var tone: Tone = .standard
 
     init(
         eyebrow: String? = nil,
         title: String,
-        supportingText: String
+        supportingText: String,
+        tone: Tone = .standard
     ) {
         self.eyebrow = eyebrow
         self.title = title
         self.supportingText = supportingText
+        self.tone = tone
     }
 
     var body: some View {
@@ -20,18 +28,32 @@ struct PactSectionHeader: View {
             if let eyebrow {
                 Text(eyebrow.uppercased())
                     .font(PactTypography.caption)
-                    .foregroundStyle(Color.pactAccent)
+                    .tracking(1.2)
+                    .foregroundStyle(eyebrowColor)
             }
 
             Text(title)
-                .font(PactTypography.screenTitle)
-                .foregroundStyle(Color.pactTextPrimary)
+                .font(PactTypography.display)
+                .foregroundStyle(titleColor)
+                .lineSpacing(1.5)
 
             Text(supportingText)
                 .font(PactTypography.body)
-                .foregroundStyle(Color.pactTextSecondary)
+                .foregroundStyle(supportingColor)
                 .fixedSize(horizontal: false, vertical: true)
         }
+    }
+
+    private var eyebrowColor: Color {
+        tone == .inverse ? Color.pactTextInverse.opacity(0.82) : Color.pactAccent
+    }
+
+    private var titleColor: Color {
+        tone == .inverse ? Color.pactTextInverse : Color.pactTextPrimary
+    }
+
+    private var supportingColor: Color {
+        tone == .inverse ? Color.pactTextInverse.opacity(0.88) : Color.pactTextSecondary
     }
 }
 

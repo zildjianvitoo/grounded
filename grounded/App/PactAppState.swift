@@ -6,8 +6,8 @@ import SwiftData
 @MainActor
 @Observable
 final class PactAppState {
-    var route: PactRoute = .onboarding
-    var contractDraft: CreateFocusContractView.Draft = .filledSample
+    var route: PactRoute = .contract
+    var contractDraft: CreateFocusContractView.Draft = .empty
     var currentContract: FocusContract?
     var currentSession: FocusSession?
     var currentBreak: FocusBreak?
@@ -35,7 +35,7 @@ final class PactAppState {
             .max(by: { $0.breakStartedAt < $1.breakStartedAt })
 
         guard let currentSession else {
-            route = currentContract == nil ? .onboarding : .contract
+            route = .contract
             refreshNotificationAuthorization()
             syncLiveActivity(now: now)
             return
@@ -92,10 +92,6 @@ final class PactAppState {
 
     func updateDraft(_ draft: CreateFocusContractView.Draft) {
         contractDraft = draft
-    }
-
-    func loadSampleContract() {
-        contractDraft = .filledSample
     }
 
     func startSession(in context: ModelContext) {

@@ -5,25 +5,41 @@ struct PactTonePicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: PactSpacing.medium) {
-            Text("Tone")
-                .font(PactTypography.label)
-                .foregroundStyle(Color.pactTextSecondary)
+            VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
+                Text("Intervention Tone")
+                    .font(PactTypography.label)
+                    .foregroundStyle(Color.pactTextSecondary)
 
-            HStack(spacing: PactSpacing.small) {
+                Text("This changes the intervention preview below.")
+                    .font(PactTypography.label)
+                    .foregroundStyle(Color.pactTextSecondary.opacity(0.78))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            VStack(spacing: PactSpacing.small) {
                 ForEach(MockFocusContract.Tone.allCases, id: \.self) { tone in
                     Button {
                         selection = tone
                     } label: {
-                        VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
-                            Text(tone.displayName)
-                                .font(PactTypography.body.weight(.semibold))
-                                .foregroundStyle(Color.pactTextPrimary)
+                        HStack(alignment: .top, spacing: PactSpacing.medium) {
+                            Circle()
+                                .fill(accentColor(for: tone))
+                                .frame(width: 10, height: 10)
+                                .padding(.top, 6)
 
-                            Text(description(for: tone))
-                                .font(PactTypography.label)
-                                .foregroundStyle(Color.pactTextSecondary)
-                                .multilineTextAlignment(.leading)
-                                .fixedSize(horizontal: false, vertical: true)
+                            VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
+                                Text(tone.displayName)
+                                    .font(PactTypography.bodyStrong)
+                                    .foregroundStyle(Color.pactTextPrimary)
+
+                                Text(description(for: tone))
+                                    .font(PactTypography.label)
+                                    .foregroundStyle(Color.pactTextSecondary)
+                                    .multilineTextAlignment(.leading)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer(minLength: 0)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(PactSpacing.medium)
@@ -34,6 +50,11 @@ struct PactTonePicker: View {
                         }
                     }
                     .buttonStyle(.plain)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel(Text("\(tone.displayName) tone"))
+                    .accessibilityHint(Text("Changes the intervention preview below."))
+                    .accessibilityAddTraits(tone == selection ? .isSelected : [])
+                    .accessibilityValue(Text(tone == selection ? "Selected" : "Not selected"))
                 }
             }
         }
@@ -42,20 +63,31 @@ struct PactTonePicker: View {
     private func description(for tone: MockFocusContract.Tone) -> String {
         switch tone {
         case .supportive:
-            "Warm and steady"
+            "Warm, steady, and encouraging"
         case .direct:
-            "Clear and firm"
+            "Clear, firm, and uncluttered"
         case .savage:
             "Sharp, never insulting"
         }
     }
 
     private func backgroundColor(for tone: MockFocusContract.Tone) -> Color {
-        tone == selection ? Color.pactSurface : Color.pactMutedSurface.opacity(0.7)
+        tone == selection ? Color.pactSurface.opacity(0.95) : Color.white.opacity(0.3)
     }
 
     private func borderColor(for tone: MockFocusContract.Tone) -> Color {
         tone == selection ? Color.pactAccent : Color.pactBorder
+    }
+
+    private func accentColor(for tone: MockFocusContract.Tone) -> Color {
+        switch tone {
+        case .supportive:
+            return Color.pactOlive
+        case .direct:
+            return Color.pactAccent
+        case .savage:
+            return Color.pactTextPrimary
+        }
     }
 }
 

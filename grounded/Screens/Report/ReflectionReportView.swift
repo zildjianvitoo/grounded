@@ -8,11 +8,12 @@ struct ReflectionReportView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: PactSpacing.large) {
-            PactCard {
+            PactCard(style: .dark) {
                 PactSectionHeader(
                     eyebrow: "Reflection Report",
                     title: "Session closed",
-                    supportingText: "A short reflection makes the next focus promise easier to keep."
+                    supportingText: "A short reflection makes the next focus promise easier to keep.",
+                    tone: .inverse
                 )
             }
 
@@ -31,10 +32,11 @@ struct ReflectionReportView: View {
             PactMetricCard(
                 title: "Breaks",
                 value: "\(session.breakCount)",
-                caption: "Interruptions recorded during the session"
+                caption: "Interruptions recorded during the session",
+                style: .paper
             )
 
-            PactCard {
+            PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
                     Text("Summary")
                         .font(PactTypography.label)
@@ -45,12 +47,15 @@ struct ReflectionReportView: View {
                         .foregroundStyle(Color.pactTextPrimary)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Divider()
-                        .overlay(Color.pactBorder)
+                    PactSectionDivider()
 
-                    ActiveReportRow(label: "Task", value: contract.taskTitle)
-                    ActiveReportRow(label: "Reason", value: contract.whyItMatters)
-                    ActiveReportRow(label: "Tone", value: contract.tone.displayName)
+                    PactDetailList(
+                        items: [
+                            PactDetailItem(label: "Task", value: contract.taskTitle),
+                            PactDetailItem(label: "Reason", value: contract.whyItMatters),
+                            PactDetailItem(label: "Tone", value: contract.tone.displayName)
+                        ]
+                    )
                 }
             }
 
@@ -67,29 +72,11 @@ struct ReflectionReportView: View {
     }
 
     private var focusMetric: some View {
-        PactMetricCard(title: "Focused", value: session.reportFocusTimeText, caption: "Time spent on contract")
+        PactMetricCard(title: "Focused", value: session.reportFocusTimeText, caption: "Time spent on contract", style: .dark)
     }
 
     private var lostMetric: some View {
-        PactMetricCard(title: "Lost", value: session.reportBreakTimeText, caption: "Time spent away from it")
-    }
-}
-
-private struct ActiveReportRow: View {
-    let label: String
-    let value: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: PactSpacing.xSmall) {
-            Text(label.uppercased())
-                .font(PactTypography.label)
-                .foregroundStyle(Color.pactTextSecondary)
-
-            Text(value)
-                .font(PactTypography.body)
-                .foregroundStyle(Color.pactTextPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
+        PactMetricCard(title: "Lost", value: session.reportBreakTimeText, caption: "Time spent away from it", style: .paper)
     }
 }
 

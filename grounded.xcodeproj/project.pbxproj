@@ -413,7 +413,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YU8G545MR2;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = groundedLiveActivityExtension-Info.plist;
+				INFOPLIST_FILE = "groundedLiveActivityExtension-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -439,7 +439,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YU8G545MR2;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = groundedLiveActivityExtension-Info.plist;
+				INFOPLIST_FILE = "groundedLiveActivityExtension-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

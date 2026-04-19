@@ -9,24 +9,21 @@ struct CreateFocusContractView: View {
     @State private var draft: Draft
     @FocusState private var focusedField: Field?
     let onStartFocus: (Draft) -> Void
-    let onLoadSample: () -> Void
     let onDraftChanged: (Draft) -> Void
 
     init(
-        draft: Draft = .filledSample,
+        draft: Draft = .empty,
         onStartFocus: @escaping (Draft) -> Void,
-        onLoadSample: @escaping () -> Void,
         onDraftChanged: @escaping (Draft) -> Void = { _ in }
     ) {
         _draft = State(initialValue: draft)
         self.onStartFocus = onStartFocus
-        self.onLoadSample = onLoadSample
         self.onDraftChanged = onDraftChanged
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: PactSpacing.large) {
-            PactCard {
+            PactCard(style: .paper) {
                 PactSectionHeader(
                     eyebrow: "Focus Contract",
                     title: "Build the contract before you begin",
@@ -34,18 +31,32 @@ struct CreateFocusContractView: View {
                 )
             }
 
-            PactCard {
+            PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.large) {
                     PactFormField(title: "Task") {
-                        TextField("Ship the mentor review prep", text: $draft.taskTitle, axis: .vertical)
-                            .font(PactTypography.body)
-                            .foregroundStyle(Color.pactTextPrimary)
-                            .textInputAutocapitalization(.sentences)
-                            .submitLabel(.next)
-                            .focused($focusedField, equals: .task)
-                            .onSubmit {
-                                focusedField = .duration
+                        HStack(spacing: PactSpacing.small) {
+                            TextField("Ship the mentor review prep", text: $draft.taskTitle, axis: .vertical)
+                                .font(PactTypography.body)
+                                .foregroundStyle(Color.pactTextPrimary)
+                                .textInputAutocapitalization(.sentences)
+                                .submitLabel(.next)
+                                .focused($focusedField, equals: .task)
+                                .accessibilityLabel("Task")
+                                .onSubmit {
+                                    focusedField = .duration
+                                }
+
+                            if !draft.taskTitle.isEmpty {
+                                Button {
+                                    draft.taskTitle = ""
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundStyle(Color.pactTextSecondary)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("Clear task")
                             }
+                        }
                     }
 
                     PactFormField(title: "Duration") {
@@ -56,6 +67,7 @@ struct CreateFocusContractView: View {
                                     .font(PactTypography.body)
                                     .foregroundStyle(Color.pactTextPrimary)
                                     .focused($focusedField, equals: .duration)
+                                    .accessibilityLabel("Duration in minutes")
 
                                 Text("minutes")
                                     .font(PactTypography.body)
@@ -73,47 +85,47 @@ struct CreateFocusContractView: View {
                     }
 
                     PactFormField(title: "Why this matters") {
-                        PactTextEditor(text: $draft.whyItMatters, prompt: "Tomorrow's review gets easier if tonight's thinking is already clear.")
+                        PactTextEditor(
+                            text: $draft.whyItMatters,
+                            prompt: "Tomorrow's review gets easier if tonight's thinking is already clear.",
+                            accessibilityLabel: "Why this matters"
+                        )
                     }
 
                     PactFormField(title: "What is at stake") {
-                        PactTextEditor(text: $draft.consequenceText, prompt: "If this slips again, the whole handoff gets heavier for the team.")
+                        PactTextEditor(
+                            text: $draft.consequenceText,
+                            prompt: "If this slips again, the whole handoff gets heavier for the team.",
+                            accessibilityLabel: "What is at stake"
+                        )
                     }
 
                     PactTonePicker(selection: $draft.tone)
                 }
             }
 
-            PactCard {
+            PactCard(style: .dark) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
                     Text("Intervention Preview")
                         .font(PactTypography.label)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactAccentSoft)
 
                     Text(previewTitle)
-                        .font(PactTypography.body.weight(.semibold))
-                        .foregroundStyle(Color.pactTextPrimary)
+                        .font(PactTypography.screenTitle)
+                        .foregroundStyle(Color.pactTextInverse)
 
                     Text(previewBody)
                         .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactTextInverse.opacity(0.76))
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
-            PactActionGroup {
-                PactPrimaryButton(
-                    title: "Start Focus Session",
-                    isEnabled: draft.isReady,
-                    action: { onStartFocus(draft) }
-                )
-            } secondary: {
-                PactSecondaryButton(title: "Load Sample Contract", action: {
-                    draft = .filledSample
-                    onDraftChanged(draft)
-                    onLoadSample()
-                })
-            }
+            PactPrimaryButton(
+                title: "Start Focus Session",
+                isEnabled: draft.isReady,
+                action: { onStartFocus(draft) }
+            )
         }
         .onAppear {
             onDraftChanged(draft)
@@ -240,8 +252,13 @@ private struct PactFormField<Field: View>: View {
                 .foregroundStyle(Color.pactTextSecondary)
 
             field
-                .padding(PactSpacing.medium)
-                .background(Color.pactMutedSurface.opacity(0.7), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+                .background(Color.white.opacity(0.3), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(Color.pactHairline, lineWidth: 1)
+                }
         }
     }
 }
@@ -249,6 +266,7 @@ private struct PactFormField<Field: View>: View {
 private struct PactTextEditor: View {
     @Binding var text: String
     let prompt: String
+    let accessibilityLabel: String
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -256,15 +274,16 @@ private struct PactTextEditor: View {
                 Text(prompt)
                     .font(PactTypography.body)
                     .foregroundStyle(Color.pactTextSecondary.opacity(0.75))
-                    .padding(.top, 8)
-                    .padding(.leading, 4)
+                    .padding(.top, 6)
+                    .padding(.leading, 2)
             }
 
             TextEditor(text: $text)
-                .frame(minHeight: 110)
+                .frame(minHeight: 96)
                 .scrollContentBackground(.hidden)
                 .font(PactTypography.body)
                 .foregroundStyle(Color.pactTextPrimary)
+                .accessibilityLabel(accessibilityLabel)
         }
     }
 }
@@ -276,7 +295,6 @@ struct CreateFocusContractView_Previews: PreviewProvider {
                 CreateFocusContractView(
                     draft: .filledSample,
                     onStartFocus: { _ in },
-                    onLoadSample: {},
                     onDraftChanged: { _ in }
                 )
             }
@@ -286,7 +304,6 @@ struct CreateFocusContractView_Previews: PreviewProvider {
                 CreateFocusContractView(
                     draft: .empty,
                     onStartFocus: { _ in },
-                    onLoadSample: {},
                     onDraftChanged: { _ in }
                 )
             }
@@ -296,7 +313,6 @@ struct CreateFocusContractView_Previews: PreviewProvider {
                 CreateFocusContractView(
                     draft: .filledSample,
                     onStartFocus: { _ in },
-                    onLoadSample: {},
                     onDraftChanged: { _ in }
                 )
             }

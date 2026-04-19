@@ -1,10 +1,12 @@
 import SwiftUI
 
 enum PactTypography {
-    static let hero = Font.system(size: 34, weight: .bold, design: .rounded)
-    static let screenTitle = Font.system(size: 28, weight: .semibold, design: .rounded)
-    static let metric = Font.system(size: 30, weight: .bold, design: .rounded)
-    static let body = Font.system(size: 16, weight: .regular, design: .rounded)
-    static let label = Font.system(size: 12, weight: .semibold, design: .rounded)
-    static let caption = Font.system(size: 13, weight: .semibold, design: .rounded)
+    static let hero = Font.system(.largeTitle, design: .serif, weight: .bold)
+    static let display = Font.system(.title, design: .serif, weight: .bold)
+    static let screenTitle = Font.system(.title2, design: .serif, weight: .semibold)
+    static let metric = Font.system(.title2, design: .serif, weight: .bold)
+    static let body = Font.system(.body, design: .default, weight: .regular)
+    static let bodyStrong = Font.system(.headline, design: .default, weight: .semibold)
+    static let label = Font.system(.caption, design: .default, weight: .semibold)
+    static let caption = Font.system(.caption2, design: .default, weight: .bold)
 }

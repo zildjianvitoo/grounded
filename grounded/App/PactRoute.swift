@@ -1,7 +1,6 @@
 import Foundation
 
 enum PactRoute: Int, CaseIterable, Identifiable {
-    case onboarding
     case contract
     case activeSession
     case replay
@@ -11,8 +10,6 @@ enum PactRoute: Int, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .onboarding:
-            "Onboarding"
         case .contract:
             "Create Contract"
         case .activeSession:
@@ -26,23 +23,19 @@ enum PactRoute: Int, CaseIterable, Identifiable {
 
     var eyebrow: String {
         switch self {
-        case .onboarding:
-            "Step 1"
         case .contract:
-            "Step 2"
+            "Step 1"
         case .activeSession:
-            "Step 3"
+            "Step 2"
         case .replay:
-            "Step 4"
+            "Step 3"
         case .report:
-            "Step 5"
+            "Step 4"
         }
     }
 
     var summary: String {
         switch self {
-        case .onboarding:
-            "Set the promise and explain how the app keeps the user emotionally anchored."
         case .contract:
             "Capture the task, the reason it matters, and the cost of drifting away from it."
         case .activeSession:
@@ -63,6 +56,6 @@ enum PactRoute: Int, CaseIterable, Identifiable {
     }
 
     var nextInDemoFlow: PactRoute {
-        next ?? .onboarding
+        next ?? .contract
     }
 }
