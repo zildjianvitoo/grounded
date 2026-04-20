@@ -104,19 +104,19 @@ struct CreateFocusContractView: View {
                 }
             }
 
-            PactCard(style: .dark) {
+            PactCard(style: .muted) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
-                    Text("Preview")
+                    Text("Reminder Preview")
                         .font(PactTypography.label)
-                        .foregroundStyle(Color.pactAccentSoft)
+                        .foregroundStyle(Color.pactAccent)
 
                     Text(previewTitle)
-                        .font(PactTypography.screenTitle)
-                        .foregroundStyle(Color.pactTextInverse)
+                        .font(PactTypography.bodyStrong)
+                        .foregroundStyle(Color.pactTextPrimary)
 
                     Text(previewBody)
                         .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextInverse.opacity(0.76))
+                        .foregroundStyle(Color.pactTextSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }

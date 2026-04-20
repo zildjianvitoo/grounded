@@ -8,13 +8,13 @@ struct PactSectionHeader: View {
 
     let eyebrow: String?
     let title: String
-    let supportingText: String
+    let supportingText: String?
     var tone: Tone = .standard
 
     init(
         eyebrow: String? = nil,
         title: String,
-        supportingText: String,
+        supportingText: String? = nil,
         tone: Tone = .standard
     ) {
         self.eyebrow = eyebrow
@@ -37,10 +37,12 @@ struct PactSectionHeader: View {
                 .foregroundStyle(titleColor)
                 .lineSpacing(1.5)
 
-            Text(supportingText)
-                .font(PactTypography.body)
-                .foregroundStyle(supportingColor)
-                .fixedSize(horizontal: false, vertical: true)
+            if let supportingText, !supportingText.isEmpty {
+                Text(supportingText)
+                    .font(PactTypography.body)
+                    .foregroundStyle(supportingColor)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 

@@ -12,15 +12,10 @@ struct ConsequenceReplayView: View {
                 PactSectionHeader(
                     eyebrow: "Break",
                     title: replay.breakDurationText,
-                    supportingText: "Here is your contract again.",
+                    supportingText: nil,
                     tone: .inverse
                 )
             }
-
-            BreakAlertPreviewView(
-                title: "Back to your contract",
-                bodyText: replay.reminderText
-            )
 
             PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
@@ -46,14 +41,17 @@ struct ConsequenceReplayView: View {
                 }
             }
 
-            PactActionGroup {
+            Spacer(minLength: PactSpacing.small)
+
+            VStack(spacing: PactSpacing.medium) {
                 PactPrimaryButton(title: "Resume Session", action: onResumeFocus)
-            } secondary: {
-                PactSecondaryButton(title: "End Session", action: {
+
+                PactDestructiveButton(title: "End Session", action: {
                     isShowingEndSessionConfirmation = true
                 })
             }
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .alert("End this session?", isPresented: $isShowingEndSessionConfirmation) {
             Button("End Session", role: .destructive, action: onEndSession)
             Button("Cancel", role: .cancel) {}

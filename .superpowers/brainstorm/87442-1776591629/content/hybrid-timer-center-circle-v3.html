@@ -1,0 +1,119 @@
+<style>
+  .hero-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .hero-card {
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, #3a281e 0%, #221812 100%);
+    padding: 18px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  }
+  .phone {
+    width: 100%;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #3a281e 0%, #231913 100%);
+    padding: 18px;
+    color: #f7ebdb;
+    min-height: 470px;
+    box-sizing: border-box;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #e29670;
+  }
+  .circle {
+    width: 268px;
+    height: 268px;
+    border-radius: 999px;
+    margin: 24px auto 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: radial-gradient(circle at center, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  }
+  .circle::before,
+  .circle::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+  }
+  .circle::before {
+    inset: 16px;
+    border: 14px solid rgba(255,255,255,0.06);
+  }
+  .circle::after {
+    inset: 16px;
+    border: 14px solid transparent;
+    border-top-color: #c6623f;
+    border-right-color: #c6623f;
+    transform: rotate(24deg);
+  }
+  .timer {
+    font-size: 58px;
+    line-height: 0.95;
+    font-family: "New York", Georgia, serif;
+    font-weight: 700;
+    text-align: center;
+  }
+  .task {
+    font-size: 24px;
+    line-height: 1.12;
+    font-family: "New York", Georgia, serif;
+    font-weight: 600;
+    text-align: center;
+    max-width: 78%;
+    margin: 0 auto;
+  }
+  .helper {
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(247,235,219,0.72);
+    margin-top: 14px;
+    text-align: center;
+  }
+</style>
+
+<h2>Hero Ring Refinement</h2>
+<p class="subtitle">Versi kiri yang kamu pilih, tapi ukuran angka saya kecilkan supaya lebih pas di dalam lingkaran.</p>
+
+<div class="hero-wrap section">
+  <div class="hero-card">
+    <div class="mockup-header">Refined Hero Ring</div>
+    <div class="phone">
+      <div class="chip"><span class="dot"></span>FOCUS ACTIVE</div>
+      <div class="circle">
+        <div class="timer">24:47</div>
+      </div>
+      <div class="task">Finish the API review notes</div>
+      <div class="helper">Angka tetap besar, tapi sekarang memberi lebih banyak napas di dalam lingkaran.</div>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="use-this" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Use This Version</h3>
+      <p>Pakai hero ring dengan timer lebih kecil seperti ini.</p>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import SwiftUI
 import SwiftData
+import UIKit
 
 @MainActor
 @Observable
@@ -12,6 +13,8 @@ final class PactAppState {
     var currentSession: FocusSession?
     var currentBreak: FocusBreak?
     var latestCompletedBreak: FocusBreak?
+    var latestCompletedSessionID: UUID?
+    var dismissedCompletedSessionID: UUID?
     var errorMessage: String?
     var notificationAuthorization: BreakNotificationScheduler.AuthorizationState = .notDetermined
 
@@ -22,17 +25,25 @@ final class PactAppState {
         in context: ModelContext,
         now: Date
     ) {
-        currentSession = latestSession
-        currentContract = latestSession?.contract ?? latestContract
-        currentBreak = latestSession?.breaks.first(where: { $0.breakEndedAt == nil })
+        let latestSessionIsCompleted = latestSession?.endedAt != nil || latestSession?.status == .completed
+        let shouldIgnoreLatestCompletedSession =
+            latestSessionIsCompleted &&
+            latestSession?.id == dismissedCompletedSessionID
+
+        currentSession = shouldIgnoreLatestCompletedSession ? nil : latestSession
+        currentContract = (shouldIgnoreLatestCompletedSession ? latestSession?.contract : currentSession?.contract) ?? latestContract
+        currentBreak = shouldIgnoreLatestCompletedSession ? nil : latestSession?.breaks.first(where: { $0.breakEndedAt == nil })
 
         if let currentContract {
             contractDraft = .init(contract: currentContract)
         }
 
-        latestCompletedBreak = latestSession?.breaks
+        latestCompletedBreak = shouldIgnoreLatestCompletedSession ? nil : latestSession?.breaks
             .filter { $0.breakEndedAt != nil }
             .max(by: { $0.breakStartedAt < $1.breakStartedAt })
+        latestCompletedSessionID = latestSessionIsCompleted && !shouldIgnoreLatestCompletedSession
+            ? latestSession?.id
+            : nil
 
         guard let currentSession else {
             route = .contract
@@ -121,13 +132,15 @@ final class PactAppState {
             currentSession = session
             currentBreak = nil
             latestCompletedBreak = nil
+            latestCompletedSessionID = nil
+            dismissedCompletedSessionID = nil
             errorMessage = nil
             route = .activeSession
             PactHaptics.startFocus()
             Task {
+                await PactLiveActivityManager.sync(session: session, contract: contract)
                 let authorization = await BreakNotificationScheduler.requestAuthorizationIfNeeded()
                 notificationAuthorization = authorization
-                await PactLiveActivityManager.sync(session: session, contract: contract)
             }
         } catch {
             PactHaptics.warning()
@@ -166,7 +179,7 @@ final class PactAppState {
         do {
             try context.save()
             if let contract = currentSession.contract {
-                Task {
+                runBackgroundCriticalTask(named: "Sync Live Activity") {
                     await PactLiveActivityManager.sync(session: currentSession, contract: contract)
                     await BreakNotificationScheduler.scheduleBreakAlert(for: contract)
                 }
@@ -228,6 +241,9 @@ final class PactAppState {
             currentSession.totalFocusSeconds = focusedSeconds(for: currentSession, asOf: now)
         }
 
+        latestCompletedSessionID = currentSession.id
+        dismissedCompletedSessionID = nil
+
         BreakNotificationScheduler.cancelPendingBreakAlert()
 
         do {
@@ -250,17 +266,25 @@ final class PactAppState {
     }
 
     func reviewCurrentContract() {
+        dismissedCompletedSessionID = latestCompletedSessionID ?? currentSession?.id
+
         if let currentContract {
             contractDraft = .init(contract: currentContract)
         }
 
+        currentSession = nil
+        currentBreak = nil
+        latestCompletedBreak = nil
+        latestCompletedSessionID = nil
         route = .contract
     }
 
     func startNewSession() {
+        dismissedCompletedSessionID = latestCompletedSessionID ?? currentSession?.id
         currentSession = nil
         currentBreak = nil
         latestCompletedBreak = nil
+        latestCompletedSessionID = nil
 
         if let currentContract {
             contractDraft = .init(contract: currentContract)
@@ -310,6 +334,8 @@ final class PactAppState {
         session.breakCount = session.breaks.count
         session.totalBreakSeconds = session.breaks.reduce(0) { $0 + $1.durationSeconds }
         session.totalFocusSeconds = focusedSeconds(for: session, asOf: targetEnd)
+        latestCompletedSessionID = session.id
+        dismissedCompletedSessionID = nil
         BreakNotificationScheduler.cancelPendingBreakAlert()
 
         do {
@@ -345,6 +371,27 @@ final class PactAppState {
                 session: currentSession,
                 contract: currentContract ?? currentSession?.contract
             )
+        }
+    }
+
+    private func runBackgroundCriticalTask(
+        named taskName: String,
+        operation: @escaping () async -> Void
+    ) {
+        var taskID: UIBackgroundTaskIdentifier = .invalid
+        taskID = UIApplication.shared.beginBackgroundTask(withName: taskName) {
+            if taskID != .invalid {
+                UIApplication.shared.endBackgroundTask(taskID)
+                taskID = .invalid
+            }
+        }
+
+        Task {
+            await operation()
+            if taskID != .invalid {
+                UIApplication.shared.endBackgroundTask(taskID)
+                taskID = .invalid
+            }
         }
     }
 }

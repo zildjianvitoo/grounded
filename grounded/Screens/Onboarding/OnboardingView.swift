@@ -4,7 +4,7 @@ struct OnboardingView: View {
     let onContinue: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: PactSpacing.large) {
+        VStack(alignment: .leading, spacing: PactSpacing.medium) {
             PactCard(style: .accent) {
                 PactSectionHeader(
                     eyebrow: "Welcome",
@@ -28,19 +28,15 @@ struct OnboardingView: View {
                 }
             }
 
+            Spacer(minLength: PactSpacing.small)
+
             PactPrimaryButton(title: "Create Contract", action: onContinue)
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
     }
 
     private var benefitGrid: some View {
         VStack(spacing: PactSpacing.small) {
-            PactFeatureCard(
-                style: .paper,
-                symbol: "laptopcomputer.and.iphone",
-                title: "Made for laptop work",
-                detail: "Keep your phone nearby while the real task stays on your computer."
-            )
-
             PactFeatureCard(
                 style: .muted,
                 symbol: "exclamationmark.bubble",

@@ -71,11 +71,27 @@ struct ReflectionReportView: View {
     }
 
     private var focusMetric: some View {
-        PactMetricCard(title: "Focused", value: session.reportFocusTimeText, caption: "Time on task", style: .dark)
+        PactMetricCard(
+            title: "Focused",
+            value: metricValue(from: session.reportFocusTimeText),
+            caption: "Time on task",
+            style: .paper
+        )
     }
 
     private var lostMetric: some View {
-        PactMetricCard(title: "Lost", value: session.reportBreakTimeText, caption: "Time away", style: .paper)
+        PactMetricCard(
+            title: "Lost",
+            value: metricValue(from: session.reportBreakTimeText),
+            caption: "Time away",
+            style: .paper
+        )
+    }
+
+    private func metricValue(from reportValue: String) -> String {
+        reportValue
+            .replacingOccurrences(of: " focused", with: "")
+            .replacingOccurrences(of: " lost", with: "")
     }
 }
 

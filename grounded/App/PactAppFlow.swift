@@ -9,15 +9,19 @@ struct PactAppFlow: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var appState = PactAppState()
     @State private var isShowingOnboarding = false
+    @State private var path: [PactRoute] = []
     @State private var now = Date()
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             PactScreenContainer {
-                routeContent
+                contractView
             }
-            .navigationTitle(appState.route.title)
+            .navigationTitle(PactRoute.contract.title)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: PactRoute.self) { route in
+                destinationView(for: route)
+            }
             .alert("Pact", isPresented: errorBinding) {
                 Button("OK") {
                     appState.dismissError()
@@ -49,6 +53,7 @@ struct PactAppFlow: View {
                     now: now
                 )
                 updateOnboardingPresentation()
+                syncNavigationPath(animated: false)
             }
             .onChange(of: sessions.count) { _, _ in
                 appState.recoverFromPersistence(
@@ -59,6 +64,7 @@ struct PactAppFlow: View {
                     now: now
                 )
                 updateOnboardingPresentation()
+                syncNavigationPath(animated: false)
             }
             .onChange(of: now) { _, newNow in
                 appState.handleClockTick(newNow, in: modelContext)
@@ -66,38 +72,9 @@ struct PactAppFlow: View {
             .onChange(of: scenePhase) { _, newPhase in
                 appState.handleScenePhaseChange(newPhase, in: modelContext, now: now)
             }
-        }
-    }
-
-    @ViewBuilder
-    private var routeContent: some View {
-        switch appState.route {
-        case .contract:
-            contractView
-        case .activeSession:
-            ActiveFocusSessionView(
-                contract: displayContract,
-                session: displaySession,
-                breakAlertSupportMessage: appState.breakAlertSupportMessage,
-                onEndSession: {
-                    appState.endCurrentSession(in: modelContext, now: now)
-                }
-            )
-        case .replay:
-            ConsequenceReplayView(
-                replay: displayReplay,
-                onResumeFocus: { appState.resumeFocus() },
-                onEndSession: {
-                    appState.endCurrentSession(in: modelContext, now: now)
-                }
-            )
-        case .report:
-            ReflectionReportView(
-                contract: displayContract,
-                session: displaySession,
-                onStartNewSession: { appState.startNewSession() },
-                onReviewContract: { appState.reviewCurrentContract() }
-            )
+            .onChange(of: appState.route) { _, _ in
+                syncNavigationPath()
+            }
         }
     }
 
@@ -107,6 +84,7 @@ struct PactAppFlow: View {
             onStartFocus: { draft in
                 appState.updateDraft(draft)
                 appState.startSession(in: modelContext)
+                syncNavigationPath()
             },
             onDraftChanged: { draft in
                 appState.updateDraft(draft)
@@ -114,12 +92,74 @@ struct PactAppFlow: View {
         )
     }
 
+    @ViewBuilder
+    private func destinationView(for route: PactRoute) -> some View {
+        switch route {
+        case .contract:
+            EmptyView()
+        case .activeSession:
+            PactScreenContainer {
+                ActiveFocusSessionView(
+                    contract: displayContract,
+                    session: displaySession,
+                    breakAlertSupportMessage: appState.breakAlertSupportMessage,
+                    onEndSession: {
+                        appState.endCurrentSession(in: modelContext, now: Date())
+                        syncNavigationPath()
+                    }
+                )
+            }
+            .navigationTitle(route.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+        case .replay:
+            PactScreenContainer {
+                ConsequenceReplayView(
+                    replay: displayReplay,
+                    onResumeFocus: {
+                        appState.resumeFocus()
+                        syncNavigationPath()
+                    },
+                    onEndSession: {
+                        appState.endCurrentSession(in: modelContext, now: Date())
+                        syncNavigationPath()
+                    }
+                )
+            }
+            .navigationTitle(route.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+        case .report:
+            PactScreenContainer {
+                ReflectionReportView(
+                    contract: displayContract,
+                    session: displaySession,
+                    onStartNewSession: {
+                        appState.startNewSession()
+                        popToContract()
+                    },
+                    onReviewContract: {
+                        appState.reviewCurrentContract()
+                        popToContract()
+                    }
+                )
+            }
+            .navigationTitle(route.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+        }
+    }
+
     private var persistedContract: FocusContract? {
         appState.currentContract ?? appState.currentSession?.contract ?? contracts.first
     }
 
     private var persistedSession: FocusSession? {
-        appState.currentSession ?? sessions.first
+        if appState.route == .report, let latestCompletedSessionID = appState.latestCompletedSessionID {
+            return sessions.first(where: { $0.id == latestCompletedSessionID }) ?? appState.currentSession
+        }
+
+        return appState.currentSession ?? sessions.first
     }
 
     private var displayContract: MockFocusContract {
@@ -141,12 +181,27 @@ struct PactAppFlow: View {
             return .sample
         }
 
+        let breakCount = persistedSession.breakCount + (appState.currentBreak == nil ? 0 : 1)
+        let isCompleted = persistedSession.endedAt != nil || persistedSession.status == .completed
         let durationSeconds = (persistedSession.contract?.durationMinutes ?? displayContract.durationMinutes) * 60
-        let effectiveEnd = persistedSession.endedAt ?? now
-        let elapsedSeconds = max(Int(effectiveEnd.timeIntervalSince(persistedSession.startedAt)), 0)
-        let breakSeconds = persistedSession.totalBreakSeconds + activeBreakElapsedSeconds
-        let focusSeconds = max(elapsedSeconds - breakSeconds, 0)
-        let remainingSeconds = max(durationSeconds - elapsedSeconds, 0)
+
+        let elapsedSeconds: Int
+        let breakSeconds: Int
+        let focusSeconds: Int
+        let remainingSeconds: Int
+
+        if isCompleted {
+            focusSeconds = max(persistedSession.totalFocusSeconds, 0)
+            breakSeconds = max(persistedSession.totalBreakSeconds, 0)
+            elapsedSeconds = focusSeconds + breakSeconds
+            remainingSeconds = 0
+        } else {
+            let effectiveEnd = persistedSession.endedAt ?? now
+            elapsedSeconds = max(Int(effectiveEnd.timeIntervalSince(persistedSession.startedAt)), 0)
+            breakSeconds = persistedSession.totalBreakSeconds + activeBreakElapsedSeconds
+            focusSeconds = max(elapsedSeconds - breakSeconds, 0)
+            remainingSeconds = max(durationSeconds - elapsedSeconds, 0)
+        }
 
         return MockFocusSession(
             taskTitle: persistedSession.contract?.taskTitle ?? displayContract.taskTitle,
@@ -157,7 +212,7 @@ struct PactAppFlow: View {
             totalBreakTimeText: PactTimeFormatter.summaryLabel(from: breakSeconds, suffix: "lost"),
             reportFocusTimeText: PactTimeFormatter.detailedSummaryLabel(from: focusSeconds, suffix: "focused"),
             reportBreakTimeText: PactTimeFormatter.detailedSummaryLabel(from: breakSeconds, suffix: "lost"),
-            breakCount: persistedSession.breakCount + (appState.currentBreak == nil ? 0 : 1)
+            breakCount: breakCount
         )
     }
 
@@ -208,6 +263,35 @@ struct PactAppFlow: View {
         hasCompletedOnboarding = true
         isShowingOnboarding = false
         appState.route = .contract
+    }
+
+    private func syncNavigationPath(animated: Bool = true) {
+        let targetPath = navigationPath(for: appState.route)
+        guard path != targetPath else {
+            return
+        }
+
+        _ = animated
+        path = targetPath
+    }
+
+    private func popToContract() {
+        path = []
+    }
+
+    private func navigationPath(for route: PactRoute) -> [PactRoute] {
+        switch route {
+        case .contract:
+            []
+        case .activeSession:
+            [.activeSession]
+        case .replay:
+            [.activeSession, .replay]
+        case .report:
+            appState.latestCompletedBreak == nil
+                ? [.activeSession, .report]
+                : [.activeSession, .replay, .report]
+        }
     }
 }
 

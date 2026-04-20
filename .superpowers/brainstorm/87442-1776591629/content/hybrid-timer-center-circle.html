@@ -1,0 +1,219 @@
+<style>
+  .circle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .circle-card {
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, #3a281e 0%, #221812 100%);
+    padding: 18px;
+    min-height: 520px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+  }
+  .phone {
+    width: 100%;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #3a281e 0%, #231913 100%);
+    padding: 18px;
+    color: #f7ebdb;
+    min-height: 430px;
+    box-sizing: border-box;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #e29670;
+  }
+  .circle-center {
+    width: 260px;
+    height: 260px;
+    border-radius: 999px;
+    margin: 24px auto 18px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .circle-inner {
+    text-align: center;
+    width: 78%;
+  }
+  .timer {
+    font-size: 64px;
+    line-height: 0.95;
+    font-family: "New York", Georgia, serif;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(247,235,219,0.58);
+    margin-bottom: 8px;
+  }
+  .task {
+    font-size: 22px;
+    line-height: 1.12;
+    font-family: "New York", Georgia, serif;
+    font-weight: 600;
+  }
+  .helper {
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(247,235,219,0.72);
+    margin-top: 10px;
+    text-align: center;
+  }
+  .ring-a {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 48%, rgba(255,255,255,0) 49%);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ring-a::before, .ring-a::after,
+  .ring-b::before, .ring-b::after,
+  .ring-c::before, .ring-c::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+  }
+  .ring-a::before {
+    inset: 16px;
+    border: 14px solid rgba(255,255,255,0.06);
+  }
+  .ring-a::after {
+    inset: 16px;
+    border: 14px solid transparent;
+    border-top-color: #c6623f;
+    border-right-color: #c6623f;
+    transform: rotate(24deg);
+  }
+  .ring-b {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ring-b::before {
+    inset: 16px;
+    border: 10px solid rgba(255,255,255,0.05);
+  }
+  .ring-b::after {
+    inset: 32px;
+    border: 8px solid rgba(198,98,63,0.52);
+  }
+  .ring-c {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .ring-c::before {
+    inset: 18px;
+    border: 12px solid rgba(255,255,255,0.06);
+  }
+  .ring-c::after {
+    inset: 18px;
+    border: 12px solid transparent;
+    border-top-color: #c6623f;
+    border-right-color: #c6623f;
+    border-bottom-color: rgba(255,255,255,0.03);
+    transform: rotate(64deg);
+  }
+  .note {
+    font-size: 13px;
+    line-height: 1.45;
+    color: #cab7a4;
+    margin-top: 12px;
+  }
+  @media (max-width: 1100px) {
+    .circle-grid { grid-template-columns: 1fr; }
+    .circle-card { min-height: auto; }
+  }
+</style>
+
+<h2>Center Circle Timer</h2>
+<p class="subtitle">Timer berada di tengah lingkaran, tapi kita jaga supaya tetap terasa seperti focus app, bukan activity tracker.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Hero Ring</h3>
+      <p>Lingkaran utama besar dengan angka di tengah. Paling dramatis.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Soft Dial</h3>
+      <p>Lebih halus dan premium, dengan ring berlapis yang tidak terlalu sporty.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Contract Orb</h3>
+      <p>Masih lingkaran, tapi lebih terasa seperti objek fokus daripada progress indicator.</p>
+    </div>
+  </div>
+</div>
+
+<div class="circle-grid section">
+  <div class="circle-card">
+    <div class="mockup-header">A. Hero Ring</div>
+    <div class="phone">
+      <div class="chip"><span class="dot"></span>FOCUS ACTIVE</div>
+      <div class="circle-center ring-a">
+        <div class="circle-inner">
+          <div class="label">Time Left</div>
+          <div class="timer">24:47</div>
+          <div class="task">Finish the API review notes</div>
+        </div>
+      </div>
+      <div class="helper">Paling kuat menutup whitespace, tapi juga paling berani secara visual.</div>
+    </div>
+    <div class="note">Ini bagus kalau kamu ingin timer benar-benar jadi objek utama layar. Risiko: bisa terasa terlalu seperti productivity gadget.</div>
+  </div>
+
+  <div class="circle-card">
+    <div class="mockup-header">B. Soft Dial</div>
+    <div class="phone">
+      <div class="chip"><span class="dot"></span>FOCUS ACTIVE</div>
+      <div class="circle-center ring-b">
+        <div class="circle-inner">
+          <div class="label">Time Left</div>
+          <div class="timer">24:47</div>
+          <div class="task">Finish the API review notes</div>
+        </div>
+      </div>
+      <div class="helper">Masih central circle, tapi terasa lebih tenang dan lebih editorial.</div>
+    </div>
+    <div class="note">Menurut saya ini paling seimbang kalau kamu ingin timer di tengah lingkaran tanpa kehilangan rasa premium.</div>
+  </div>
+
+  <div class="circle-card">
+    <div class="mockup-header">C. Contract Orb</div>
+    <div class="phone">
+      <div class="chip"><span class="dot"></span>FOCUS ACTIVE</div>
+      <div class="circle-center ring-c">
+        <div class="circle-inner">
+          <div class="timer">24:47</div>
+          <div class="task">Finish the API review notes</div>
+        </div>
+      </div>
+      <div class="helper">Lebih artistik, kurang teknis, dan lebih dekat ke bahasa visual Pact.</div>
+    </div>
+    <div class="note">Ini opsi paling khas. Tidak terlalu jelas sebagai progress ring, tapi bisa terasa paling branded.</div>
+  </div>
+</div>
