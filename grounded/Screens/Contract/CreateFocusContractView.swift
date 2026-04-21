@@ -104,7 +104,7 @@ struct CreateFocusContractView: View {
                 }
             }
 
-            PactCard(style: .muted) {
+            PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
                     Text("Reminder Preview")
                         .font(PactTypography.label)
@@ -116,7 +116,7 @@ struct CreateFocusContractView: View {
 
                     Text(previewBody)
                         .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextSecondary)
+                        .foregroundStyle(Color.pactTextPrimary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }

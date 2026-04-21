@@ -70,7 +70,9 @@ struct PactAppFlow: View {
                 appState.handleClockTick(newNow, in: modelContext)
             }
             .onChange(of: scenePhase) { _, newPhase in
-                appState.handleScenePhaseChange(newPhase, in: modelContext, now: now)
+                let lifecycleNow = Date()
+                now = lifecycleNow
+                appState.handleScenePhaseChange(newPhase, in: modelContext, now: lifecycleNow)
             }
             .onChange(of: appState.route) { _, _ in
                 syncNavigationPath()

@@ -38,17 +38,6 @@ struct ReflectionReportView: View {
 
             PactCard(style: .paper) {
                 VStack(alignment: .leading, spacing: PactSpacing.medium) {
-                    Text("Summary")
-                        .font(PactTypography.label)
-                        .foregroundStyle(Color.pactTextSecondary)
-
-                    Text(summaryText)
-                        .font(PactTypography.body)
-                        .foregroundStyle(Color.pactTextPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    PactSectionDivider()
-
                     PactDetailList(
                         items: [
                             PactDetailItem(label: "Task", value: contract.taskTitle),
@@ -64,10 +53,6 @@ struct ReflectionReportView: View {
                 PactSecondaryButton(title: "Edit Contract", action: onReviewContract)
             }
         }
-    }
-
-    private var summaryText: String {
-        "\(session.reportFocusTimeText) focused. \(session.reportBreakTimeText) lost across \(session.breakCount) break\(session.breakCount == 1 ? "" : "s")."
     }
 
     private var focusMetric: some View {

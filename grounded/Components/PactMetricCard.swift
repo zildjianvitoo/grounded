@@ -46,29 +46,25 @@ struct PactMetricCard: View {
         }
     }
 
-    private var background: some ShapeStyle {
+    private var background: AnyShapeStyle {
         switch style {
         case .paper:
-            return LinearGradient(
-                colors: [Color.white.opacity(0.48), Color.pactMutedSurface.opacity(0.88)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            return AnyShapeStyle(Color.pactSurface)
         case .dark:
-            return LinearGradient(
+            return AnyShapeStyle(LinearGradient(
                 colors: [Color.pactDarkSurfaceRaised, Color.pactDarkSurface],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
-            )
+            ))
         }
     }
 
     private var borderColor: Color {
-        style == .dark ? Color.white.opacity(0.08) : Color.pactHairline
+        style == .dark ? Color.white.opacity(0.08) : Color.pactBorder.opacity(0.7)
     }
 
     private var labelColor: Color {
-        style == .dark ? Color.pactAccentSoft.opacity(0.92) : Color.pactTextSecondary
+        style == .dark ? Color.pactAccentSoft.opacity(0.92) : Color.pactTextSecondary.opacity(0.95)
     }
 
     private var valueColor: Color {
@@ -76,7 +72,7 @@ struct PactMetricCard: View {
     }
 
     private var captionColor: Color {
-        style == .dark ? Color.pactTextInverse.opacity(0.72) : Color.pactTextSecondary
+        style == .dark ? Color.pactTextInverse.opacity(0.72) : Color.pactTextPrimary.opacity(0.82)
     }
 }
 

@@ -120,7 +120,6 @@ final class PactAppState {
             consequenceText: draft.consequenceText.trimmingCharacters(in: .whitespacesAndNewlines),
             tone: draft.tone.toneType
         )
-
         let session = FocusSession(contract: contract)
 
         context.insert(contract)
