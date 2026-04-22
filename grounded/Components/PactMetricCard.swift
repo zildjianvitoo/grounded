@@ -22,7 +22,7 @@ struct PactMetricCard: View {
         VStack(alignment: .leading, spacing: PactSpacing.small) {
             Text(title.uppercased())
                 .font(PactTypography.label)
-                .tracking(1.0)
+                .tracking(0.6)
                 .foregroundStyle(labelColor)
 
             Text(value)

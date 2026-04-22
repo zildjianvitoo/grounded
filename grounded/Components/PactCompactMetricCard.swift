@@ -16,7 +16,7 @@ struct PactCompactMetricCard: View {
 
             Text(label.uppercased())
                 .font(PactTypography.label)
-                .tracking(1.4)
+                .tracking(0.8)
                 .foregroundStyle(Color.pactTextSecondary)
         }
         .frame(maxWidth: .infinity, minHeight: 55, alignment: .topLeading)

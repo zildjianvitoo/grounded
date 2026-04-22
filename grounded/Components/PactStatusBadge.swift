@@ -11,7 +11,7 @@ struct PactStatusBadge: View {
 
             Text(text.uppercased())
                 .font(PactTypography.label)
-                .tracking(0.8)
+                .tracking(0.5)
         }
         .foregroundStyle(Color.pactTextInverse)
         .padding(.horizontal, PactSpacing.medium)

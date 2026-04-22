@@ -28,7 +28,7 @@ struct PactSectionHeader: View {
             if let eyebrow {
                 Text(eyebrow.uppercased())
                     .font(PactTypography.caption)
-                    .tracking(1.2)
+                    .tracking(0.8)
                     .foregroundStyle(eyebrowColor)
             }
 
