@@ -6,6 +6,7 @@ struct PactActivityAttributes: ActivityAttributes {
         var statusText: String
         var startedAt: Date
         var targetEndAt: Date
+        var breakStartedAt: Date?
     }
 
     var sessionID: String
